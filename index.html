@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biothane Stencil Generator</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js",
+          "three/examples/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="configurator.css" />
+  </head>
+  <body>
+    <h1>Biothane Stencil Generator</h1>
+    <form id="configurator">
+      <input id="url" name="url" type="hidden" value="./biothane-stencil.scad" />
+
+      <div>
+        <label for="depth">Depth:</label>
+        <input id="depth" name="depth" type="number" value="60" />
+      </div>
+
+      <div class="buttons">
+        <button id="preview_button" type="submit">Update Preview</button>
+        <button id="download_button" type="submit">Download STL</button>
+        <button id="cancel" type="button">Cancel</button>
+      </div>
+      
+    </form>
+    <script src="configurator.js" type="module"></script>
+
+    <div id="preview" style="height: 50vh; width: 80vh;">
+      <img id="spinner" src="./spinner.gif" width="25" height="25" hidden/>
+    </div>
+
+  </body>
+</html>

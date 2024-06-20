@@ -36,6 +36,8 @@ jobs:
         with:
           repository: IngeniousKink/openscad-configurator
           path: openscad-configurator
+      - name: cp -v index.html *.scad ./openscad-configurator/configurator
+        run: cp -v index.html *.scad ./openscad-configurator/configurator
       - name: cd openscad-configurator && make
         run: cd openscad-configurator && make
       - name: Setup Pages
