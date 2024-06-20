@@ -5,11 +5,11 @@
 // PARAMETERS
 
 // dimensions
-wall_thickness = 3;                                // Thickness of the walls in mm
-inner_width = 13;                                  // Inner width of the stencil in mm
-depth = 2*13;                                      // Outer depth in mm
-material_height = 2.5;                             // Height of the material to be stencild in mm
-side_pane_depth = 2*13;                            // or = depth
+WALL_THICKNESS = 3;                                // Thickness of the walls in mm
+INNER_WIDTH = 13;                                  // Inner width of the stencil in mm
+DEPTH = 2*13;                                      // Outer DEPTH in mm
+MATERIAL_HEIGHT = 2.5;                             // Height of the material to be stencil in mm
+SIDE_PANE_DEPTH = DEPTH;                           // Length of the side pane in mm
 
 // holes
 number_of_holes = 1;                               // Total number of holes in one row
@@ -17,14 +17,14 @@ holes_grid_length = 13;                            // Total length from first ho
 hole_diameter = 5;                                 // Diameter of each hole
 number_of_rows = 2;                                // Number of rows of holes
 distance_between_rows = (
-  (inner_width/(number_of_rows+1)) + hole_diameter
+  (INNER_WIDTH/(number_of_rows+1)) + hole_diameter
 );                                                 // Vertical distance between rows of holes
 
 // text label
 label = "biothane-stencil-generator";
 font_size = 3;                                     // Font size for the text
-text_height = wall_thickness;                      // Text extrusion height
-outer_width_text = str(inner_width, "mm");
+text_height = WALL_THICKNESS;                      // Text extrusion height
+outer_width_text = str(INNER_WIDTH, "mm");
 combined_text = str(label, " — ", outer_width_text);
 
 // toggle for front and back panes
@@ -32,28 +32,28 @@ include_front_pane = false;                        // Include front pane if true
 include_back_pane = false;                         // Include back pane if true
 
 // measuring markers
-long_mark_length = inner_width;                    // Length of the long marker, e.g., 1cm
+long_mark_length = INNER_WIDTH;                    // Length of the long marker, e.g., 1cm
 short_mark_length = 5;                             // Length of the short marker, e.g. for millimeters
 mark_width = 0.5;                                  // Width of the marker lines
-mark_depth = 2;                                    // Depth the markings cut into the pane
+mark_depth = 2;                                    // DEPTH the markings cut into the pane
 
 // END OF PARAMETERS
 
-outer_width = inner_width + (2 * wall_thickness);  // Outer outer_width of the panes in mm
-height = wall_thickness + 2.5 + wall_thickness;    // Outer height in mm
+outer_width = INNER_WIDTH + (2 * WALL_THICKNESS);  // Outer outer_width of the panes in mm
+height = WALL_THICKNESS + 2.5 + WALL_THICKNESS;    // Outer height in mm
 
 module front_pane() {
     if (include_front_pane) {
         color([1,0,0])
         translate([
           0,
-          -depth/2 - wall_thickness/2,
+          -DEPTH/2 - WALL_THICKNESS/2,
           height/2
         ])
         cube([
           outer_width,
-          wall_thickness,
-          height + wall_thickness
+          WALL_THICKNESS,
+          height + WALL_THICKNESS
         ], true);
     }
 }
@@ -63,25 +63,25 @@ module back_pane() {
         color([1,0,0])
         translate([
             0,
-            depth/2 + wall_thickness/2,
+            DEPTH/2 + WALL_THICKNESS/2,
             height/2
         ])
         cube([
             outer_width,
-            wall_thickness,
-            height + wall_thickness
+            WALL_THICKNESS,
+            height + WALL_THICKNESS
         ], true);
     }
 }
 
 module measure_markings() {
-    for (pos = [0:(depth/2)-1]) {
+    for (pos = [0:(DEPTH/2)-1]) {
         mark_length = (pos % 10 == 0) ? long_mark_length : short_mark_length;
         
         translate([
           0,
           pos,
-          wall_thickness/2
+          WALL_THICKNESS/2
         
         ])
         rotate([90,90,0])
@@ -91,7 +91,7 @@ module measure_markings() {
 
 module bottom_pane() {
     difference() {
-        cube([outer_width, depth, wall_thickness], true);
+        cube([outer_width, DEPTH, WALL_THICKNESS], true);
         
         holes();
         
@@ -121,9 +121,9 @@ module holes() {
                 -vertical_offset + hole_spacing * i,
             
                 // Center on the z axis
-                wall_thickness/2 
+                WALL_THICKNESS/2 
             ])
-            cylinder(d=hole_diameter, h=wall_thickness * 3, $fn=50, center=true);
+            cylinder(d=hole_diameter, h=WALL_THICKNESS * 3, $fn=50, center=true);
         }
     }
 }
@@ -135,13 +135,13 @@ module text_module() {
 }
 
 module left_pane() {
-    translate([-outer_width/2 + wall_thickness/2, 0, height/2 - wall_thickness/2])
+    translate([-outer_width/2 + WALL_THICKNESS/2, 0, height/2 - WALL_THICKNESS/2])
     
     difference() {
-        cube([wall_thickness, side_pane_depth, height - wall_thickness], true);
+        cube([WALL_THICKNESS, SIDE_PANE_DEPTH, height - WALL_THICKNESS], true);
         
         // Subtract text
-        translate([wall_thickness-2, 0, wall_thickness-2.5])
+        translate([WALL_THICKNESS-2, 0, WALL_THICKNESS-2.5])
         rotate([90, 0, 270])
         text_module();
     }
@@ -149,8 +149,8 @@ module left_pane() {
 }
 
 module right_pane() {
-    translate([outer_width/2 - wall_thickness/2, 0, height/2 - wall_thickness/2])
-    cube([wall_thickness, side_pane_depth, height - wall_thickness], true);
+    translate([outer_width/2 - WALL_THICKNESS/2, 0, height/2 - WALL_THICKNESS/2])
+    cube([WALL_THICKNESS, SIDE_PANE_DEPTH, height - WALL_THICKNESS], true);
     
 }
 
