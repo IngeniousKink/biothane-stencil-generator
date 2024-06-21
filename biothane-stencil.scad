@@ -28,8 +28,15 @@ outer_width_text = str(INNER_WIDTH, "mm");
 combined_text = str(label, " — ", outer_width_text);
 
 // toggle for front and back panes
-include_front_pane = false;                        // Include front pane if true
-include_back_pane = false;                         // Include back pane if true
+INCLUDE_FRONT_PANE = false;                        // Include front pane if true
+INCLUDE_BACK_PANE = false;                         // Include back pane if true
+
+
+FRONT_LEFT_CUTOUT = false;
+FRONT_RIGHT_CUTOUT = false;
+BACK_LEFT_CUTOUT = false;
+BACK_RIGHT_CUTOUT = false;
+
 
 // measuring markers
 long_mark_length = INNER_WIDTH;                    // Length of the long marker, e.g., 1cm
@@ -41,36 +48,6 @@ mark_depth = 2;                                    // DEPTH the markings cut int
 
 outer_width = INNER_WIDTH + (2 * WALL_THICKNESS);  // Outer outer_width of the panes in mm
 
-module front_pane() {
-    if (include_front_pane) {
-        translate([
-          0,
-          -DEPTH/2 - WALL_THICKNESS/2,
-          WALL_THICKNESS/2,
-        ])
-        cube([
-          outer_width,
-          WALL_THICKNESS,
-          WALL_THICKNESS * 2,
-        ], true);
-    }
-}
-
-module back_pane() {
-    if (include_back_pane) {
-        translate([
-            0,
-            DEPTH/2 + WALL_THICKNESS/2,
-            WALL_THICKNESS/2
-        ])
-        cube([
-            outer_width,
-            WALL_THICKNESS,
-            WALL_THICKNESS * 2
-        ], true);
-    }
-}
-
 module measure_markings() {
     for (pos = [0:(DEPTH/2)-1]) {
         mark_length = (pos % 10 == 0) ? long_mark_length : short_mark_length;
@@ -78,7 +55,7 @@ module measure_markings() {
         translate([
           0,
           pos,
-          WALL_THICKNESS/2
+          (WALL_THICKNESS - MATERIAL_HEIGHT)-mark_depth
         
         ])
         rotate([90,90,0])
@@ -90,8 +67,8 @@ module triangular_cutout(offset_side, offset_end) {
     translate([outer_width/2, -DEPTH/2, -(WALL_THICKNESS + MATERIAL_HEIGHT)/2])
     linear_extrude(height = (WALL_THICKNESS + MATERIAL_HEIGHT * 1.000001)) {
         polygon(points=[
-            [0, -WALL_THICKNESS],
-            [(-outer_width/2) + offset_end, -WALL_THICKNESS],
+            [0, -WALL_THICKNESS*1.001],
+            [(-outer_width/2) + offset_end, -WALL_THICKNESS*1.001],
             [0, ((DEPTH - SIDE_PANE_DEPTH)/2) - offset_side]
         ]);
     }
@@ -104,15 +81,23 @@ module biothane_stencil() {
  
         // inner cutout
         translate([0, 0, MATERIAL_HEIGHT])
-        cube([INNER_WIDTH, DEPTH*1.0001, MATERIAL_HEIGHT], true);
+        cube([INNER_WIDTH, DEPTH*1.0001, MATERIAL_HEIGHT*1.1], true);
 
         // front pane cutout
-        translate([0, WALL_THICKNESS/2 + DEPTH/2 , 0])
-        cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+        if (!INCLUDE_FRONT_PANE) {
+            translate([0, WALL_THICKNESS/2 + DEPTH/2 , 0])
+            cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+        }
 
         // back pane cutout
-        %translate([0, -WALL_THICKNESS/2 - DEPTH/2 , 0])
-        cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+        if (!INCLUDE_BACK_PANE) {
+            translate([0, -WALL_THICKNESS/2 - DEPTH/2 , 0])
+            cube([
+              outer_width,
+              WALL_THICKNESS,
+              (WALL_THICKNESS + MATERIAL_HEIGHT)*1.001
+            ], true);
+        }
 
         // left side text cutout
         translate([-WALL_THICKNESS/2 + (outer_width/2), 0, 0])
@@ -120,10 +105,26 @@ module biothane_stencil() {
         text_module();
 
         // triangular edges cutout
-        mirror([1, 0, 0]) mirror([0, 1, 0]) triangular_cutout(offset_side = 3, offset_end = 3);
-        mirror([0, 1, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
-        mirror([1, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
-        mirror([0, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
+        if (!FRONT_LEFT_CUTOUT) {
+          mirror([1, 0, 0])
+          mirror([0, 1, 0])
+          triangular_cutout(offset_side = 3, offset_end = 3);
+        }
+        
+        if (!FRONT_RIGHT_CUTOUT) {
+           mirror([0, 1, 0])
+           triangular_cutout(offset_side = 3, offset_end = 3);
+        }
+        
+        if (!BACK_LEFT_CUTOUT) {
+          mirror([1, 0, 0])
+          triangular_cutout(offset_side = 3, offset_end = 3);
+        }
+        
+        if (!BACK_RIGHT_CUTOUT) {
+          mirror([0, 0, 0])
+          triangular_cutout(offset_side = 3, offset_end = 3);
+        }
         
         // holes cutout
         holes();
@@ -157,7 +158,12 @@ module holes() {
                 // Center on the z axis
                 WALL_THICKNESS/2 
             ])
-            cylinder(d=hole_diameter, h=WALL_THICKNESS * 3, $fn=50, center=true);
+            cylinder(
+              d=hole_diameter,
+              h=WALL_THICKNESS * 3,
+              $fn=50,
+              center=true
+            );
         }
     }
 }
