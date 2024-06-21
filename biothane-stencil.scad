@@ -87,27 +87,48 @@ module measure_markings() {
 }
 
 module triangular_cutout(offset_side, offset_end) {
-    translate([outer_width/2, -DEPTH/2, -WALL_THICKNESS/2])
-    linear_extrude(height = WALL_THICKNESS) {
+    translate([outer_width/2, -DEPTH/2, -(WALL_THICKNESS + MATERIAL_HEIGHT)/2])
+    linear_extrude(height = (WALL_THICKNESS + MATERIAL_HEIGHT * 1.000001)) {
         polygon(points=[
-            [0, 0],
-            [(-outer_width/2) + offset_end, 0],
+            [0, -WALL_THICKNESS],
+            [(-outer_width/2) + offset_end, -WALL_THICKNESS],
             [0, ((DEPTH - SIDE_PANE_DEPTH)/2) - offset_side]
         ]);
     }
 }
 
-module bottom_pane() {
+module biothane_stencil() {
     difference() {
-        cube([outer_width, DEPTH, WALL_THICKNESS], true);
+        // base model
+        cube([outer_width, DEPTH + (2*WALL_THICKNESS), WALL_THICKNESS + MATERIAL_HEIGHT], true);
+ 
+        // inner cutout
+        translate([0, 0, MATERIAL_HEIGHT])
+        cube([INNER_WIDTH, DEPTH*1.0001, MATERIAL_HEIGHT], true);
 
+        // front pane cutout
+        translate([0, WALL_THICKNESS/2 + DEPTH/2 , 0])
+        cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+
+        // back pane cutout
+        %translate([0, -WALL_THICKNESS/2 - DEPTH/2 , 0])
+        cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+
+        // left side text cutout
+        translate([-WALL_THICKNESS/2 + (outer_width/2), 0, 0])
+        rotate([90, 0, 90])
+        text_module();
+
+        // triangular edges cutout
         mirror([1, 0, 0]) mirror([0, 1, 0]) triangular_cutout(offset_side = 3, offset_end = 3);
         mirror([0, 1, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
         mirror([1, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
         mirror([0, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
         
+        // holes cutout
         holes();
 
+        // bottom pane measure cutout
         measure_markings();
         mirror([0,1,0]) measure_markings();
     }
@@ -147,28 +168,4 @@ module text_module() {
     text(combined_text, size = font_size, halign = "center", valign = "center", $fn = 50);
 }
 
-module left_pane() {
-    translate([-outer_width/2 + WALL_THICKNESS/2, 0, MATERIAL_HEIGHT])
-    
-    difference() {
-        cube([WALL_THICKNESS, SIDE_PANE_DEPTH, MATERIAL_HEIGHT], true);
-        
-        // Subtract text
-        translate([WALL_THICKNESS-2, 0, 0])
-        rotate([90, 0, 270])
-        text_module();
-    }
-    
-}
-
-module right_pane() {
-    translate([outer_width/2 - WALL_THICKNESS/2, 0, MATERIAL_HEIGHT])
-    cube([WALL_THICKNESS, SIDE_PANE_DEPTH, MATERIAL_HEIGHT], true);
-    
-}
-
-bottom_pane();
-left_pane();
-right_pane();
-front_pane();
-back_pane();
+biothane_stencil();
