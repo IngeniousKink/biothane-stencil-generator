@@ -28,8 +28,8 @@ outer_width_text = str(INNER_WIDTH, "mm");
 combined_text = str(label, " — ", outer_width_text);
 
 // toggle for front and back panes
-include_front_pane = true;                        // Include front pane if true
-include_back_pane = true;                         // Include back pane if true
+include_front_pane = false;                        // Include front pane if true
+include_back_pane = false;                         // Include back pane if true
 
 // measuring markers
 long_mark_length = INNER_WIDTH;                    // Length of the long marker, e.g., 1cm
@@ -86,19 +86,25 @@ module measure_markings() {
     }
 }
 
+module triangular_cutout(offset_side, offset_end) {
+    translate([outer_width/2, -DEPTH/2, -WALL_THICKNESS/2])
+    linear_extrude(height = WALL_THICKNESS) {
+        polygon(points=[
+            [0, 0],
+            [(-outer_width/2) + offset_end, 0],
+            [0, ((DEPTH - SIDE_PANE_DEPTH)/2) - offset_side]
+        ]);
+    }
+}
 
 module bottom_pane() {
     difference() {
         cube([outer_width, DEPTH, WALL_THICKNESS], true);
 
-        // Create the triangular cutout
-        translate([outer_width/2, -DEPTH/2, -WALL_THICKNESS/2])
-        %rotate([0, 0, 0]) {
-            linear_extrude(height = WALL_THICKNESS) {
-                polygon(points=[[0, 0], [-outer_width/2, 0], [0, (DEPTH - SIDE_PANE_DEPTH)/2]]);
-            }
-        }
-
+        mirror([1, 0, 0]) mirror([0, 1, 0]) triangular_cutout(offset_side = 3, offset_end = 3);
+        mirror([0, 1, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
+        mirror([1, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
+        mirror([0, 0, 0])                   triangular_cutout(offset_side = 3, offset_end = 3);
         
         holes();
 
