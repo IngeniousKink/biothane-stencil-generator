@@ -7,21 +7,21 @@
 // dimensions
 WALL_THICKNESS = 3;                                // Thickness of the walls in mm
 INNER_WIDTH = 13;                                  // Inner width of the stencil in mm
-DEPTH = 100;                                      // Outer DEPTH in mm
+DEPTH = 130;                                        // Outer DEPTH in mm
 MATERIAL_HEIGHT = 2.5;                             // Height of the material to be stencil in mm
-SIDE_PANE_DEPTH = DEPTH - 20;                           // Length of the side pane in mm
+SIDE_PANE_DEPTH = DEPTH - 20;                      // Length of the side pane in mm
 
 // holes
-number_of_holes = 5;                               // Total number of holes in one row
-holes_grid_length = 60;                            // Total length from first hole to last hole
-hole_diameter = 2;                                 // Diameter of each hole
-number_of_rows = 3;                                // Number of rows of holes
+number_of_holes = 7;                               // Total number of holes in one row
+holes_grid_length = 100;                            // Total length from first hole to last hole
+hole_diameter = 6.5;                                 // Diameter of each hole
+number_of_rows = 1;                                // Number of rows of holes
 distance_between_rows = (
-  (INNER_WIDTH/(number_of_rows+1))
+  (INNER_WIDTH/(number_of_rows))
 );                                                 // Vertical distance between rows of holes
 
 // text label
-label = "biothane-stencil-generator";
+label = "biothane stencil";
 font_size = 3;                                     // Font size for the text
 text_height = WALL_THICKNESS;                      // Text extrusion height
 outer_width_text = str(INNER_WIDTH, "mm");
@@ -29,11 +29,11 @@ combined_text = str(label, " — ", outer_width_text);
 
 // toggle for front and back panes
 INCLUDE_FRONT_PANE = false;                        // Include front pane if true
-INCLUDE_BACK_PANE = false;                         // Include back pane if true
+INCLUDE_BACK_PANE = true;                         // Include back pane if true
 
 
-FRONT_LEFT_CUTOUT = false;
-FRONT_RIGHT_CUTOUT = false;
+FRONT_LEFT_CUTOUT = true;
+FRONT_RIGHT_CUTOUT = true;
 BACK_LEFT_CUTOUT = false;
 BACK_RIGHT_CUTOUT = false;
 
@@ -65,10 +65,10 @@ module measure_markings() {
 
 module triangular_cutout(offset_side, offset_end) {
     translate([outer_width/2, -DEPTH/2, -(WALL_THICKNESS + MATERIAL_HEIGHT)/2])
-    linear_extrude(height = (WALL_THICKNESS + MATERIAL_HEIGHT * 1.000001)) {
+    linear_extrude(height = (WALL_THICKNESS + MATERIAL_HEIGHT)) {
         polygon(points=[
-            [0, -WALL_THICKNESS*1.001],
-            [(-outer_width/2) + offset_end, -WALL_THICKNESS*1.001],
+            [0, -WALL_THICKNESS],
+            [(-outer_width/2) + offset_end, -WALL_THICKNESS],
             [0, ((DEPTH - SIDE_PANE_DEPTH)/2) - offset_side]
         ]);
     }
@@ -105,25 +105,25 @@ module biothane_stencil() {
         text_module();
 
         // triangular edges cutout
-        if (!FRONT_LEFT_CUTOUT) {
+        if (FRONT_LEFT_CUTOUT == true) {
           mirror([1, 0, 0])
           mirror([0, 1, 0])
-          triangular_cutout(offset_side = 3, offset_end = 3);
+          triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (!FRONT_RIGHT_CUTOUT) {
+        if (FRONT_RIGHT_CUTOUT == true) {
            mirror([0, 1, 0])
-           triangular_cutout(offset_side = 3, offset_end = 3);
+           triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (!BACK_LEFT_CUTOUT) {
+        if (BACK_LEFT_CUTOUT == true) {
           mirror([1, 0, 0])
-          triangular_cutout(offset_side = 3, offset_end = 3);
+          triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (!BACK_RIGHT_CUTOUT) {
+        if (BACK_RIGHT_CUTOUT == true) {
           mirror([0, 0, 0])
-          triangular_cutout(offset_side = 3, offset_end = 3);
+          triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
         // holes cutout
