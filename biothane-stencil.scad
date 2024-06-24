@@ -53,8 +53,8 @@ holes2_vertical_offset = 0.0; // .01
 label = "biothane-stencil-generator";
 font_size = 3;
 text_height = wall_thickness;
-outer_width_text = str(material_width, "mm");
-combined_text = str(label, " — ", outer_width_text);
+text_append_material_width = false;
+
 
 /* [front and back panes] */
 include_front_pane = false;
@@ -94,6 +94,14 @@ outer_width = material_width + (2 * wall_thickness);
 if (auto_side_pane_length) {
   side_pane_length = stencil_length - 20;
 }
+
+text_material_width = str(material_width, "mm");
+
+combined_text = (
+  text_append_material_width
+  ? str(label, " — ", text_material_width)
+  : label
+);
 
 module measure_markings() {
     for (pos = [0:(stencil_length/2)-1]) {
