@@ -25,22 +25,22 @@
     <form id="configurator">
       <input id="url" name="url" type="hidden" value="./biothane-stencil.scad" />
 
-      <!-- main parameters -->
       <div>
-        <label for="depth">Depth (mm):</label>
-        <input id="depth" name="depth" type="number" value="60" />
+        <label for="stencil_length">Stencil length (mm):</label>
+        <input id="stencil_length" name="stencil_length" type="number" value="70" />
       </div>
       <div>
-        <label for="inner_width">Inner width / width of material (mm):</label>
-        <input id="inner_width" name="inner_width" type="number" value="13" />
+        <label for="material_width">Width of material (mm):</label>
+        <input id="material_width" name="material_width" type="number" value="13" />
       </div>
-
-      <!-- parameters with good defaults -->
       <div>
         <label for="material_height">Height of material (mm):</label>
         <input id="material_height" name="material_height" type="number" value="2.5" />
       </div>
-
+      <div>
+        <label for="stencil_length">Stencil length (mm):</label>
+        <input id="stencil_length" name="stencil_length" type="number" value="70" />
+      </div>
 
       <div class="buttons">
         <button id="preview_button" type="submit">Update Preview</button>

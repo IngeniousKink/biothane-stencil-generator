@@ -3,73 +3,83 @@
 // https://github.com/IngeniousKink/biothane-stencil-generator
 
 // PARAMETERS
+/* [general dimensions] */
 
-// dimensions
-WALL_THICKNESS = 3;                                // Thickness of the walls in mm
-INNER_WIDTH = 13;                                  // Inner width of the stencil in mm
-DEPTH = 130;                                        // Outer DEPTH in mm
-MATERIAL_HEIGHT = 2.5;                             // Height of the material to be stencil in mm
-SIDE_PANE_DEPTH = DEPTH - 20;                      // Length of the side pane in mm
+// Thickness of the walls in mm
+wall_thickness = 2;
 
-// holes
-number_of_holes = 7;                               // Total number of holes in one row
-holes_grid_length = 100;                            // Total length from first hole to last hole
-hole_diameter = 6.5;                                 // Diameter of each hole
-number_of_rows = 1;                                // Number of rows of holes
-distance_between_rows = (
-  (INNER_WIDTH/(number_of_rows))
-);                                                 // Vertical distance between rows of holes
+// Width of the material in mm
+material_width = 13;
 
-// text label
-label = "biothane stencil";
-font_size = 3;                                     // Font size for the text
-text_height = WALL_THICKNESS;                      // Text extrusion height
-outer_width_text = str(INNER_WIDTH, "mm");
+// Height of the material in mm
+material_height = 2.5;
+
+// Length of the stencil
+stencil_length = 70;
+
+// Length of the side pane
+side_pane_length = stencil_length - 20;
+
+/* [first set of holes] */
+hole_diameter = 6.5;
+
+columns = 3;
+rows = 1;
+column_spacing = 10;
+row_spacing = 20;
+
+
+/* [text label] */
+label = "biothane-stencil-generator";
+font_size = 3;
+text_height = wall_thickness;
+outer_width_text = str(material_width, "mm");
 combined_text = str(label, " — ", outer_width_text);
 
-// toggle for front and back panes
-INCLUDE_FRONT_PANE = false;                        // Include front pane if true
-INCLUDE_BACK_PANE = true;                         // Include back pane if true
 
+/* [front and back panes] */
+include_front_pane = false;
+include_back_pane = false;
 
-FRONT_LEFT_CUTOUT = true;
-FRONT_RIGHT_CUTOUT = true;
-BACK_LEFT_CUTOUT = false;
-BACK_RIGHT_CUTOUT = false;
+/* [edge cutouts] */
+front_left_cutout = false;
+front_right_cutout = false;
+back_left_cutout = false;
+back_right_cutout = false;
 
+/* [measuring markers] */
+marker_width = 0.5;
+marker_length = 2;
 
-// measuring markers
-long_mark_length = INNER_WIDTH;                    // Length of the long marker, e.g., 1cm
-short_mark_length = 5;                             // Length of the short marker, e.g. for millimeters
-mark_width = 0.5;                                  // Width of the marker lines
-mark_depth = 2;                                    // DEPTH the markings cut into the pane
+marker_long_mark_length = material_width;
+marker_short_mark_length = 5;
 
 // END OF PARAMETERS
 
-outer_width = INNER_WIDTH + (2 * WALL_THICKNESS);  // Outer outer_width of the panes in mm
+outer_width = material_width + (2 * wall_thickness);
 
 module measure_markings() {
-    for (pos = [0:(DEPTH/2)-1]) {
-        mark_length = (pos % 10 == 0) ? long_mark_length : short_mark_length;
+    for (pos = [0:(stencil_length/2)-1]) {
+        mark_length = (pos % 10 == 0) ? marker_long_mark_length : marker_short_mark_length;
         
         translate([
           0,
           pos,
-          (WALL_THICKNESS - MATERIAL_HEIGHT)-mark_depth
+          wall_thickness/2
         
         ])
         rotate([90,90,0])
-        cube([mark_depth, mark_length, 0.5], true);
+        cube([marker_length, mark_length, 0.5], true);
     }
 }
 
 module triangular_cutout(offset_side, offset_end) {
-    translate([outer_width/2, -DEPTH/2, -(WALL_THICKNESS + MATERIAL_HEIGHT)/2])
-    linear_extrude(height = (WALL_THICKNESS + MATERIAL_HEIGHT)) {
+    translate([outer_width/2, -stencil_length/2, -(wall_thickness + material_height)/2])
+    linear_extrude(height = (wall_thickness + material_height * 1.000001)) {
         polygon(points=[
-            [0, -WALL_THICKNESS],
-            [(-outer_width/2) + offset_end, -WALL_THICKNESS],
-            [0, ((DEPTH - SIDE_PANE_DEPTH)/2) - offset_side]
+            [0, -wall_thickness],
+            [(-outer_width/2) + offset_end, -wall_thickness],
+            [0, ((stencil_length - side_pane_length)/2) - offset_side]
         ]);
     }
 }
@@ -77,51 +87,47 @@ module triangular_cutout(offset_side, offset_end) {
 module biothane_stencil() {
     difference() {
         // base model
-        cube([outer_width, DEPTH + (2*WALL_THICKNESS), WALL_THICKNESS + MATERIAL_HEIGHT], true);
+        cube([outer_width, stencil_length + (2*wall_thickness), wall_thickness + material_height], true);
  
         // inner cutout
-        translate([0, 0, MATERIAL_HEIGHT])
-        cube([INNER_WIDTH, DEPTH*1.0001, MATERIAL_HEIGHT*1.1], true);
+        translate([0, 0, material_height])
+        cube([material_width, stencil_length*1.0001, material_height], true);
 
         // front pane cutout
-        if (!INCLUDE_FRONT_PANE) {
-            translate([0, WALL_THICKNESS/2 + DEPTH/2 , 0])
-            cube([outer_width, WALL_THICKNESS, WALL_THICKNESS + MATERIAL_HEIGHT], true);
+        if (!include_front_pane) {
+            translate([0, wall_thickness/2 + stencil_length/2 , 0])
+            cube([outer_width, wall_thickness, wall_thickness + material_height], true);
         }
 
         // back pane cutout
-        if (!INCLUDE_BACK_PANE) {
-            translate([0, -WALL_THICKNESS/2 - DEPTH/2 , 0])
-            cube([
-              outer_width,
-              WALL_THICKNESS,
-              (WALL_THICKNESS + MATERIAL_HEIGHT)*1.001
-            ], true);
+        if (!include_back_pane) {
+            translate([0, -wall_thickness/2 - stencil_length/2 , 0])
+            cube([outer_width, wall_thickness, wall_thickness + material_height], true);
         }
 
         // left side text cutout
-        translate([-WALL_THICKNESS/2 + (outer_width/2), 0, 0])
+        translate([-wall_thickness/2 + (outer_width/2), 0, 0])
         rotate([90, 0, 90])
         text_module();
 
         // triangular edges cutout
-        if (FRONT_LEFT_CUTOUT == true) {
+        if (front_left_cutout == true) {
           mirror([1, 0, 0])
           mirror([0, 1, 0])
           triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (FRONT_RIGHT_CUTOUT == true) {
+        if (front_right_cutout == true) {
            mirror([0, 1, 0])
            triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (BACK_LEFT_CUTOUT == true) {
+        if (back_left_cutout == true) {
           mirror([1, 0, 0])
           triangular_cutout(offset_side = 0, offset_end = 0);
         }
         
-        if (BACK_RIGHT_CUTOUT == true) {
+        if (back_right_cutout == true) {
           mirror([0, 0, 0])
           triangular_cutout(offset_side = 0, offset_end = 0);
         }
@@ -137,33 +143,30 @@ module biothane_stencil() {
 
 module holes() {
     holes_grid_width = (
-        (number_of_rows - 1) * distance_between_rows
+        (rows - 1) * row_spacing
     );
     
-    hole_spacing = holes_grid_length / (number_of_holes - 1);
+    holes_grid_length = (
+        (columns - 1) * column_spacing
+    );
 
     horizontal_offset = holes_grid_width / 2;
     vertical_offset = holes_grid_length / 2;
     
     // Loop through the positions and create holes
-    for (i = [0:number_of_holes-1]) {
-        for (j = [0:number_of_rows-1]) {
+    for (i = [0:columns-1]) {
+        for (j = [0:rows-1]) {
             translate([
                 // Adjust x-direction for centering
-                -horizontal_offset + distance_between_rows * j,
+                -horizontal_offset + row_spacing * j,
                 
                 // Adjust y-direction for centering
-                -vertical_offset + hole_spacing * i,
+                -vertical_offset + column_spacing * i,
             
                 // Center on the z axis
-                WALL_THICKNESS/2 
+                wall_thickness/2 
             ])
-            cylinder(
-              d=hole_diameter,
-              h=WALL_THICKNESS * 3,
-              $fn=50,
-              center=true
-            );
+            cylinder(d=hole_diameter, h=wall_thickness * 3, $fn=50, center=true);
         }
     }
 }
