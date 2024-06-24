@@ -25,16 +25,29 @@ stencil_length = 70;
 
 /* [Holes (first set)] */
 // enable this set of holes
-holes_enabled = true;
+holes1_enabled = true;
 
-hole_diameter = 6.5; // .1
-columns = 3;
-rows = 1;
-column_spacing = 10; // .1
-row_spacing = 20; // .1
+holes1_diameter = 6.5; // .1
+holes1_columns = 3;
+holes1_rows = 1;
+holes1_column_spacing = 10; // .1
+holes1_row_spacing = 20; // .1
 
-holes_horizontal_offset = 0.0; // .1
-holes_vertical_offset = 0.0; // .1
+holes1_horizontal_offset = 0.0; // .1
+holes1_vertical_offset = 0.0; // .1
+
+/* [Holes (second set)] */
+// enable this set of holes
+holes2_enabled = true;
+
+holes2_diameter = 6.5; // .1
+holes2_columns = 3;
+holes2_rows = 1;
+holes2_column_spacing = 10; // .1
+holes2_row_spacing = 20; // .1
+
+holes2_horizontal_offset = 0.0; // .1
+holes2_vertical_offset = 0.0; // .1
 
 /* [text label] */
 label = "biothane-stencil-generator";
@@ -168,8 +181,29 @@ module biothane_stencil() {
           );
         }
         
-        // holes cutout
-        holes();
+        if (holes1_enabled) {
+            holes(
+                diameter = holes1_diameter,
+                columns = holes1_columns,
+                rows = holes1_rows,
+                column_spacing = holes1_column_spacing,
+                row_spacing = holes1_row_spacing,
+                horizontal_offset = holes1_horizontal_offset,
+                vertical_offset = holes1_vertical_offset
+            );
+        }
+
+        if (holes2_enabled) {
+            holes(
+                diameter = holes2_diameter,
+                columns = holes2_columns,
+                rows = holes2_rows,
+                column_spacing = holes2_column_spacing,
+                row_spacing = holes2_row_spacing,
+                horizontal_offset = holes2_horizontal_offset,
+                vertical_offset = holes2_vertical_offset
+            );
+        }
 
         // bottom pane measure cutout
         measure_markings();
@@ -177,8 +211,15 @@ module biothane_stencil() {
     }
 }
 
-module holes() {
-
+module holes(
+    diameter = 6.5,
+    columns = 3,
+    rows = 1,
+    column_spacing = 10,
+    row_spacing = 20,
+    horizontal_offset = 0.0,
+    vertical_offset = 0.0
+) {
     grid_width = (
         (rows - 1) * row_spacing
     );
@@ -187,8 +228,8 @@ module holes() {
         (columns - 1) * column_spacing
     );
 
-    horizontal_offset = (grid_width / 2) + holes_horizontal_offset;
-    vertical_offset = (grid_length / 2) + holes_vertical_offset;
+    horizontal_offset = (grid_width / 2) + horizontal_offset;
+    vertical_offset = (grid_length / 2) + vertical_offset;
     
     // Loop through the positions and create holes
     for (i = [0:columns-1]) {
@@ -203,10 +244,11 @@ module holes() {
                 // Center on the z axis
                 wall_thickness/2 
             ])
-            cylinder(d=hole_diameter, h=wall_thickness * 3, $fn=50, center=true);
+            cylinder(d=diameter, h=wall_thickness * 3, $fn=50, center=true);
         }
     }
 }
+
 
 module text_module() {
     color([0,1,1])
