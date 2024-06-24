@@ -27,27 +27,27 @@ stencil_length = 70;
 // enable this set of holes
 holes1_enabled = true;
 
-holes1_diameter = 6.5; // .1
+holes1_diameter = 6.5; // .01
 holes1_columns = 3;
 holes1_rows = 1;
-holes1_column_spacing = 10; // .1
-holes1_row_spacing = 20; // .1
+holes1_column_spacing = 10; // .01
+holes1_row_spacing = 20; // .01
 
-holes1_horizontal_offset = 0.0; // .1
-holes1_vertical_offset = 0.0; // .1
+holes1_horizontal_offset = 0.0; // .01
+holes1_vertical_offset = 0.0; // .01
 
 /* [Holes (second set)] */
 // enable this set of holes
 holes2_enabled = true;
 
-holes2_diameter = 6.5; // .1
+holes2_diameter = 6.5; // .01
 holes2_columns = 3;
 holes2_rows = 1;
-holes2_column_spacing = 10; // .1
-holes2_row_spacing = 20; // .1
+holes2_column_spacing = 10; // .01
+holes2_row_spacing = 20; // .01
 
-holes2_horizontal_offset = 0.0; // .1
-holes2_vertical_offset = 0.0; // .1
+holes2_horizontal_offset = 0.0; // .01
+holes2_vertical_offset = 0.0; // .01
 
 /* [text label] */
 label = "biothane-stencil-generator";
