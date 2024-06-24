@@ -6,28 +6,35 @@
 /* [general dimensions] */
 
 // Thickness of the walls in mm
-wall_thickness = 2;
+wall_thickness = 3; // .1
 
 // Width of the material in mm
-material_width = 13;
+material_width = 13; // .1
 
 // Height of the material in mm
-material_height = 2.5;
+material_height = 2.5; // .1
+
+// Length of the side pane in mm
+side_pane_length = 40;
+
+// if set, automatically compute the next value
+auto_side_pane_length = false;
 
 // Length of the stencil
 stencil_length = 70;
 
-// Length of the side pane
-side_pane_length = stencil_length - 20;
+/* [Holes (first set)] */
+// enable this set of holes
+holes_enabled = true;
 
-/* [first set of holes] */
-hole_diameter = 6.5;
-
+hole_diameter = 6.5; // .1
 columns = 3;
 rows = 1;
-column_spacing = 10;
-row_spacing = 20;
+column_spacing = 10; // .1
+row_spacing = 20; // .1
 
+holes_horizontal_offset = 0.0; // .1
+holes_vertical_offset = 0.0; // .1
 
 /* [text label] */
 label = "biothane-stencil-generator";
@@ -64,12 +71,16 @@ back_right_cutout_offset_end = 0;
 marker_width = 0.5;
 marker_length = 2;
 
-marker_long_mark_length = material_width;
 marker_short_mark_length = 5;
+marker_long_mark_length = material_width;
 
 // END OF PARAMETERS
 
 outer_width = material_width + (2 * wall_thickness);
+
+if (auto_side_pane_length) {
+  side_pane_length = stencil_length - 20;
+}
 
 module measure_markings() {
     for (pos = [0:(stencil_length/2)-1]) {
@@ -167,16 +178,17 @@ module biothane_stencil() {
 }
 
 module holes() {
-    holes_grid_width = (
+
+    grid_width = (
         (rows - 1) * row_spacing
     );
-    
-    holes_grid_length = (
+
+    grid_length = (
         (columns - 1) * column_spacing
     );
 
-    horizontal_offset = holes_grid_width / 2;
-    vertical_offset = holes_grid_length / 2;
+    horizontal_offset = (grid_width / 2) + holes_horizontal_offset;
+    vertical_offset = (grid_length / 2) + holes_vertical_offset;
     
     // Loop through the positions and create holes
     for (i = [0:columns-1]) {
