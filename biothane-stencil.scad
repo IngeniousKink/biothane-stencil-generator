@@ -36,16 +36,29 @@ text_height = wall_thickness;
 outer_width_text = str(material_width, "mm");
 combined_text = str(label, " — ", outer_width_text);
 
-
 /* [front and back panes] */
 include_front_pane = false;
 include_back_pane = false;
 
-/* [edge cutouts] */
+/* [edge cutouts front left] */
 front_left_cutout = false;
+front_left_cutout_offset_side = 0;
+front_left_cutout_offset_end = 0;
+
+/* [edge cutouts front right] */
 front_right_cutout = false;
+front_right_cutout_offset_side = 0;
+front_right_cutout_offset_end = 0;
+
+/* [edge cutouts back left] */
 back_left_cutout = false;
+back_left_cutout_offset_side = 0;
+back_left_cutout_offset_end = 0;
+
+/* [edge cutouts back right] */
 back_right_cutout = false;
+back_right_cutout_offset_side = 0;
+back_right_cutout_offset_end = 0;
 
 /* [measuring markers] */
 marker_width = 0.5;
@@ -114,22 +127,34 @@ module biothane_stencil() {
         if (front_left_cutout == true) {
           mirror([1, 0, 0])
           mirror([0, 1, 0])
-          triangular_cutout(offset_side = 0, offset_end = 0);
+          triangular_cutout(
+             offset_side = front_left_cutout_offset_side,
+             offset_end = front_left_cutout_offset_end
+          );
         }
         
         if (front_right_cutout == true) {
            mirror([0, 1, 0])
-           triangular_cutout(offset_side = 0, offset_end = 0);
+           triangular_cutout(
+             offset_side = front_right_cutout_offset_side,
+             offset_end = front_right_cutout_offset_end
+           );
         }
         
         if (back_left_cutout == true) {
           mirror([1, 0, 0])
-          triangular_cutout(offset_side = 0, offset_end = 0);
+          triangular_cutout(
+            offset_side = back_left_cutout_offset_side,
+            offset_end = back_left_cutout_offset_end
+          );
         }
         
         if (back_right_cutout == true) {
           mirror([0, 0, 0])
-          triangular_cutout(offset_side = 0, offset_end = 0);
+          triangular_cutout(
+            offset_side = back_right_cutout_offset_side,
+            offset_end = back_right_cutout_offset_end
+          );
         }
         
         // holes cutout
