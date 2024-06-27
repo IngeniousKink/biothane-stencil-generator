@@ -142,7 +142,7 @@ module biothane_stencil() {
         ], true);
  
         // inner cutout
-        translate([0, 0, (-material_height-EXTRA)/2])
+        translate([0, 0, -(EXTRA/2)])
         cube([
           material_width,
           stencil_length,
