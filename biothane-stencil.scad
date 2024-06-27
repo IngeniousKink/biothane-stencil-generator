@@ -5,23 +5,25 @@
 // PARAMETERS
 /* [general dimensions] */
 
-// Thickness of the walls in mm
-wall_thickness = 3; // .1
+// Length of the stencil
+stencil_length = 70;
 
 // Width of the material in mm
 material_width = 13; // .1
 
+// Length of the side pane in mm
+side_pane_length = 40;
+
 // Height of the material in mm
 material_height = 2.5; // .1
 
-// Length of the side pane in mm
-side_pane_length = 40;
+// Thickness of the walls in mm
+wall_thickness = 3; // .1
+
 
 // if set, automatically compute the next value
 auto_side_pane_length = false;
 
-// Length of the stencil
-stencil_length = 70;
 
 /* [Holes (first set)] */
 // enable this set of holes
