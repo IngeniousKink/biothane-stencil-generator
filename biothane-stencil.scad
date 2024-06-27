@@ -206,7 +206,7 @@ module biothane_stencil() {
 
         // left side text cutout
         translate([-wall_thickness/2 + (outer_width/2), 0, 0])
-        rotate([90, 0, 90])
+        rotate([90, 180, 90])
         text_module();
 
         // triangular edges cutout
