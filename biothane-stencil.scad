@@ -306,7 +306,7 @@ module holes(
                 // Center on the z axis
                 wall_thickness/2 
             ])
-            cylinder(d=diameter, h=wall_thickness * 3, $fn=50, center=true);
+            cylinder(d=diameter, h=EXTRA, $fn=50, center=true);
         }
     }
 }
