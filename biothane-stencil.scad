@@ -37,7 +37,7 @@ holes1_row_spacing = 20; // .01
 
 holes1_horizontal_offset = 0.0; // .01
 holes1_vertical_offset = 0.0; // .01
-holes1_diameter_top_multiplier = 1.5; // .1
+holes1_diameter_top_multiplier = 1.3; // .1
 
 /* [Holes (second set)] */
 // enable this set of holes
@@ -51,14 +51,14 @@ holes2_row_spacing = 20; // .01
 
 holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
-holes2_diameter_top_multiplier = 1.5; // .1
+holes2_diameter_top_multiplier = 1.3; // .1
 
 /* [text text_left] */
 text_left = "biothane-stencil-generator";
 text_right = "";
 
 font_size = 3;
-text_height = wall_thickness;
+text_height = wall_thickness/2;
 auto_text_right_append_material_width = true;
 
 
@@ -96,7 +96,7 @@ marker_long_mark_length = material_width;
 
 EXTRA = 5 + 5; // use to prevent z-fighting
 
-outer_width = material_width + (2 * wall_thickness);
+outer_width = material_width + wall_thickness;
 
 if (auto_side_pane_length) {
   side_pane_length = stencil_length - 20;
@@ -141,15 +141,15 @@ module biothane_stencil() {
         // base model
         cube([
           outer_width,
-          stencil_length + (2*wall_thickness),
-          wall_thickness + material_height
+          wall_thickness + stencil_length,
+          2*wall_thickness + material_height
         ], true);
  
         // inner cutout
         translate([0, 0, -(EXTRA/2)])
         cube([
           material_width,
-          stencil_length,
+          stencil_length*1.0001,
           material_height + EXTRA
         ], true);
 
@@ -211,12 +211,12 @@ module biothane_stencil() {
         }
 
         // left side text cutout
-        translate([-wall_thickness/2 + (outer_width/2), 0, 0])
+        translate([-wall_thickness/4 + (outer_width/2), 0, 0])
         rotate([90, 180, 90])
         text_module(text_left);
         
         // right side text cutout
-        translate([wall_thickness/2 - (outer_width/2), 0, 0])
+        translate([wall_thickness/4 - (outer_width/2), 0, 0])
         rotate([0, -90, 0])
         rotate([0, 0, 90])
         text_module(combined_text_right);
@@ -319,14 +319,14 @@ module holes(
                 -vertical_offset + column_spacing * i,
             
                 // Center on the z axis
-                wall_thickness/2 
+                wall_thickness/2 + material_height/2
             ])
             
             
             cylinder(
-              d1=diameter*diameter_top_multiplier,
-              d2=diameter,
-              h=wall_thickness,
+              d2=diameter*diameter_top_multiplier,
+              d1=diameter,
+              h=wall_thickness*1.001,
               $fn=50,
               center=true
             );
