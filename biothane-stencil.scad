@@ -53,11 +53,13 @@ holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
 holes2_diameter_top_multiplier = 1.5; // .1
 
-/* [text label] */
-label = "biothane-stencil-generator";
+/* [text text_left] */
+text_left = "biothane-stencil-generator";
+text_right = "";
+
 font_size = 3;
 text_height = wall_thickness;
-text_append_material_width = false;
+auto_text_right_append_material_width = true;
 
 
 /* [front and back panes] */
@@ -102,10 +104,10 @@ if (auto_side_pane_length) {
 
 text_material_width = str(material_width, "mm");
 
-combined_text = (
-  text_append_material_width
-  ? str(label, " — ", text_material_width)
-  : label
+combined_text_right = (
+  auto_text_right_append_material_width
+  ? str(text_right, text_material_width)
+  : text_right
 );
 
 module measure_markings() {
@@ -211,7 +213,13 @@ module biothane_stencil() {
         // left side text cutout
         translate([-wall_thickness/2 + (outer_width/2), 0, 0])
         rotate([90, 180, 90])
-        text_module();
+        text_module(text_left);
+        
+        // right side text cutout
+        translate([wall_thickness/2 - (outer_width/2), 0, 0])
+        rotate([0, -90, 0])
+        rotate([0, 0, 90])
+        text_module(combined_text_right);
 
         // triangular edges cutout
         if (front_left_cutout == true) {
@@ -327,10 +335,17 @@ module holes(
 }
 
 
-module text_module() {
+module text_module(text) {
     color([0,1,1])
     linear_extrude(height = text_height)
-    text(combined_text, size = font_size, halign = "center", valign = "center", $fn = 50);
+    text(
+      text,
+      size = font_size,
+      halign = "center",
+      valign = "center",
+      $fn = 50
+    );
 }
 
+rotate([0,180,0])
 biothane_stencil();
