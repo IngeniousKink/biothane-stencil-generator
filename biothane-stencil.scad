@@ -37,6 +37,7 @@ holes1_row_spacing = 20; // .01
 
 holes1_horizontal_offset = 0.0; // .01
 holes1_vertical_offset = 0.0; // .01
+holes1_diameter_top_multiplier = 1.5; // .1
 
 /* [Holes (second set)] */
 // enable this set of holes
@@ -50,6 +51,7 @@ holes2_row_spacing = 20; // .01
 
 holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
+holes2_diameter_top_multiplier = 1.5; // .1
 
 /* [text label] */
 label = "biothane-stencil-generator";
@@ -253,7 +255,8 @@ module biothane_stencil() {
                 column_spacing = holes1_column_spacing,
                 row_spacing = holes1_row_spacing,
                 horizontal_offset = holes1_horizontal_offset,
-                vertical_offset = holes1_vertical_offset
+                vertical_offset = holes1_vertical_offset,
+                diameter_top_multiplier = holes1_diameter_top_multiplier,
             );
         }
 
@@ -265,7 +268,8 @@ module biothane_stencil() {
                 column_spacing = holes2_column_spacing,
                 row_spacing = holes2_row_spacing,
                 horizontal_offset = holes2_horizontal_offset,
-                vertical_offset = holes2_vertical_offset
+                vertical_offset = holes2_vertical_offset,
+                diameter_top_multiplier = holes2_diameter_top_multiplier,
             );
         }
 
@@ -282,7 +286,8 @@ module holes(
     column_spacing = 10,
     row_spacing = 20,
     horizontal_offset = 0.0,
-    vertical_offset = 0.0
+    vertical_offset = 0.0,
+    diameter_top_multiplier = 1.5,
 ) {
     grid_width = (
         (rows - 1) * row_spacing
@@ -308,7 +313,15 @@ module holes(
                 // Center on the z axis
                 wall_thickness/2 
             ])
-            cylinder(d=diameter, h=EXTRA, $fn=50, center=true);
+            
+            
+            cylinder(
+              d1=diameter*diameter_top_multiplier,
+              d2=diameter,
+              h=wall_thickness,
+              $fn=50,
+              center=true
+            );
         }
     }
 }
