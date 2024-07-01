@@ -38,6 +38,7 @@ holes1_row_spacing = 20; // .01
 holes1_horizontal_offset = 0.0; // .01
 holes1_vertical_offset = 0.0; // .01
 holes1_diameter_top_multiplier = 1.3; // .1
+holes1_rivet_inner_diameter = 4.5; // .01
 
 /* [Holes (second set)] */
 // enable this set of holes
@@ -52,6 +53,7 @@ holes2_row_spacing = 20; // .01
 holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
 holes2_diameter_top_multiplier = 1.3; // .1
+holes2_rivet_inner_diameter = 4.5; // .01
 
 /* [text text_left] */
 text_left = "biothane-stencil-generator";
@@ -285,6 +287,43 @@ module biothane_stencil() {
         measure_markings();
         mirror([0,1,0]) measure_markings();
     }
+    
+    if($preview) {
+    // visualize material
+    
+    
+    // visualize rivets
+    if (holes1_enabled) {
+       translate([0,0,-wall_thickness])
+       color("silver")
+       scale([0,0,3])
+       holes(
+                diameter = holes1_rivet_inner_diameter,
+                columns = holes1_columns,
+                rows = holes1_rows,
+                column_spacing = holes1_column_spacing,
+                row_spacing = holes1_row_spacing,
+                horizontal_offset = holes1_horizontal_offset,
+                vertical_offset = holes1_vertical_offset,
+                diameter_top_multiplier = 1,
+            );
+       }
+       
+    if (holes2_enabled) {
+       translate([0,0,-wall_thickness])
+       color("silver")
+       holes(
+                diameter = holes2_rivet_inner_diameter,
+                columns = holes2_columns,
+                rows = holes2_rows,
+                column_spacing = holes2_column_spacing,
+                row_spacing = holes2_row_spacing,
+                horizontal_offset = holes2_horizontal_offset,
+                vertical_offset = holes2_vertical_offset,
+                diameter_top_multiplier = 1,
+            );
+       }       
+    }
 }
 
 module holes(
@@ -319,17 +358,20 @@ module holes(
                 -vertical_offset + column_spacing * i,
             
                 // Center on the z axis
-                wall_thickness/2 + material_height/2
+                
             ])
             
-            
+            {
+            translate([0,0,wall_thickness/2 + material_height/2])
             cylinder(
-              d2=diameter*diameter_top_multiplier,
+              d2=diameter * diameter_top_multiplier,
               d1=diameter,
               h=wall_thickness*1.001,
               $fn=50,
               center=true
             );
+
+            }
         }
     }
 }
