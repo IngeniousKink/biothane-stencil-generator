@@ -25,22 +25,156 @@
     <form id="configurator">
       <input id="url" name="url" type="hidden" value="./biothane-stencil.scad" />
 
-      <div>
-        <label for="stencil_length">Stencil length (mm):</label>
-        <input id="stencil_length" name="stencil_length" type="number" value="70" />
-      </div>
-      <div>
-        <label for="material_width">Width of material (mm):</label>
-        <input id="material_width" name="material_width" type="number" value="13" />
-      </div>
-      <div>
-        <label for="material_height">Height of material (mm):</label>
-        <input id="material_height" name="material_height" type="number" value="2.5" />
-      </div>
-      <div>
-        <label for="stencil_length">Stencil length (mm):</label>
-        <input id="stencil_length" name="stencil_length" type="number" value="70" />
-      </div>
+      <!-- beginning of customizer parameters -->
+      <label for="stencil_length">Stencil Length</label>
+      <input id="stencil_length" name="stencil_length" type="number" value="70"/>
+      <br/>
+      <label for="material_width">Material Width</label>
+      <input id="material_width" name="material_width" type="number" value="13"/>
+      <br/>
+      <label for="side_pane_length">Side Pane Length</label>
+      <input id="side_pane_length" name="side_pane_length" type="number" value="40"/>
+      <br/>
+      <label for="material_height">Material Height</label>
+      <input id="material_height" name="material_height" type="number" step="any" value="2.5"/>
+      <br/>
+      <label for="wall_thickness">Wall Thickness</label>
+      <input id="wall_thickness" name="wall_thickness" type="number" value="3"/>
+      <br/>
+      <label for="auto_side_pane_length">Auto Side Pane Length</label>
+      <input id="auto_side_pane_length" name="auto_side_pane_length" type="checkbox" />
+      <br/>
+      <label for="holes1_enabled">Holes1 Enabled</label>
+      <input id="holes1_enabled" name="holes1_enabled" type="checkbox" checked/>
+      <br/>
+      <label for="holes1_diameter">Holes1 Diameter</label>
+      <input id="holes1_diameter" name="holes1_diameter" type="number" step="any" value="6.5"/>
+      <br/>
+      <label for="holes1_columns">Holes1 Columns</label>
+      <input id="holes1_columns" name="holes1_columns" type="number" value="3"/>
+      <br/>
+      <label for="holes1_rows">Holes1 Rows</label>
+      <input id="holes1_rows" name="holes1_rows" type="number" value="1"/>
+      <br/>
+      <label for="holes1_column_spacing">Holes1 Column Spacing</label>
+      <input id="holes1_column_spacing" name="holes1_column_spacing" type="number" value="10"/>
+      <br/>
+      <label for="holes1_row_spacing">Holes1 Row Spacing</label>
+      <input id="holes1_row_spacing" name="holes1_row_spacing" type="number" value="20"/>
+      <br/>
+      <label for="holes1_horizontal_offset">Holes1 Horizontal Offset</label>
+      <input id="holes1_horizontal_offset" name="holes1_horizontal_offset" type="number" step="any" value="0.0"/>
+      <br/>
+      <label for="holes1_vertical_offset">Holes1 Vertical Offset</label>
+      <input id="holes1_vertical_offset" name="holes1_vertical_offset" type="number" step="any" value="0.0"/>
+      <br/>
+      <label for="holes1_diameter_top_multiplier">Holes1 Diameter Top Multiplier</label>
+      <input id="holes1_diameter_top_multiplier" name="holes1_diameter_top_multiplier" type="number" step="any" value="1.3"/>
+      <br/>
+      <label for="holes1_rivet_inner_diameter">Holes1 Rivet Inner Diameter</label>
+      <input id="holes1_rivet_inner_diameter" name="holes1_rivet_inner_diameter" type="number" step="any" value="4.5"/>
+      <br/>
+      <label for="holes2_enabled">Holes2 Enabled</label>
+      <input id="holes2_enabled" name="holes2_enabled" type="checkbox" checked/>
+      <br/>
+      <label for="holes2_diameter">Holes2 Diameter</label>
+      <input id="holes2_diameter" name="holes2_diameter" type="number" step="any" value="6.5"/>
+      <br/>
+      <label for="holes2_columns">Holes2 Columns</label>
+      <input id="holes2_columns" name="holes2_columns" type="number" value="3"/>
+      <br/>
+      <label for="holes2_rows">Holes2 Rows</label>
+      <input id="holes2_rows" name="holes2_rows" type="number" value="1"/>
+      <br/>
+      <label for="holes2_column_spacing">Holes2 Column Spacing</label>
+      <input id="holes2_column_spacing" name="holes2_column_spacing" type="number" value="10"/>
+      <br/>
+      <label for="holes2_row_spacing">Holes2 Row Spacing</label>
+      <input id="holes2_row_spacing" name="holes2_row_spacing" type="number" value="20"/>
+      <br/>
+      <label for="holes2_horizontal_offset">Holes2 Horizontal Offset</label>
+      <input id="holes2_horizontal_offset" name="holes2_horizontal_offset" type="number" step="any" value="0.0"/>
+      <br/>
+      <label for="holes2_vertical_offset">Holes2 Vertical Offset</label>
+      <input id="holes2_vertical_offset" name="holes2_vertical_offset" type="number" step="any" value="0.0"/>
+      <br/>
+      <label for="holes2_diameter_top_multiplier">Holes2 Diameter Top Multiplier</label>
+      <input id="holes2_diameter_top_multiplier" name="holes2_diameter_top_multiplier" type="number" step="any" value="1.3"/>
+      <br/>
+      <label for="holes2_rivet_inner_diameter">Holes2 Rivet Inner Diameter</label>
+      <input id="holes2_rivet_inner_diameter" name="holes2_rivet_inner_diameter" type="number" step="any" value="4.5"/>
+      <br/>
+      <label for="text_left">Text Left</label>
+      <input id="text_left" name="text_left" type="text" value="biothane-stencil-generator"/>
+      <br/>
+      <label for="text_right">Text Right</label>
+      <input id="text_right" name="text_right" type="text" value=""/>
+      <br/>
+      <label for="font_size">Font Size</label>
+      <input id="font_size" name="font_size" type="number" value="3"/>
+      <br/>
+      <label for="text_height">Text Height</label>
+      <input id="text_height" name="text_height" type="text" value="wall_thickness/2"/>
+      <br/>
+      <label for="auto_text_right_append_material_width">Auto Text Right Append Material Width</label>
+      <input id="auto_text_right_append_material_width" name="auto_text_right_append_material_width" type="checkbox" checked/>
+      <br/>
+      <label for="include_front_pane">Include Front Pane</label>
+      <input id="include_front_pane" name="include_front_pane" type="checkbox" />
+      <br/>
+      <label for="include_back_pane">Include Back Pane</label>
+      <input id="include_back_pane" name="include_back_pane" type="checkbox" />
+      <br/>
+      <label for="front_left_cutout">Front Left Cutout</label>
+      <input id="front_left_cutout" name="front_left_cutout" type="checkbox" />
+      <br/>
+      <label for="front_left_cutout_offset_side">Front Left Cutout Offset Side</label>
+      <input id="front_left_cutout_offset_side" name="front_left_cutout_offset_side" type="number" value="0"/>
+      <br/>
+      <label for="front_left_cutout_offset_end">Front Left Cutout Offset End</label>
+      <input id="front_left_cutout_offset_end" name="front_left_cutout_offset_end" type="number" value="0"/>
+      <br/>
+      <label for="front_right_cutout">Front Right Cutout</label>
+      <input id="front_right_cutout" name="front_right_cutout" type="checkbox" />
+      <br/>
+      <label for="front_right_cutout_offset_side">Front Right Cutout Offset Side</label>
+      <input id="front_right_cutout_offset_side" name="front_right_cutout_offset_side" type="number" value="0"/>
+      <br/>
+      <label for="front_right_cutout_offset_end">Front Right Cutout Offset End</label>
+      <input id="front_right_cutout_offset_end" name="front_right_cutout_offset_end" type="number" value="0"/>
+      <br/>
+      <label for="back_left_cutout">Back Left Cutout</label>
+      <input id="back_left_cutout" name="back_left_cutout" type="checkbox" />
+      <br/>
+      <label for="back_left_cutout_offset_side">Back Left Cutout Offset Side</label>
+      <input id="back_left_cutout_offset_side" name="back_left_cutout_offset_side" type="number" value="0"/>
+      <br/>
+      <label for="back_left_cutout_offset_end">Back Left Cutout Offset End</label>
+      <input id="back_left_cutout_offset_end" name="back_left_cutout_offset_end" type="number" value="0"/>
+      <br/>
+      <label for="back_right_cutout">Back Right Cutout</label>
+      <input id="back_right_cutout" name="back_right_cutout" type="checkbox" />
+      <br/>
+      <label for="back_right_cutout_offset_side">Back Right Cutout Offset Side</label>
+      <input id="back_right_cutout_offset_side" name="back_right_cutout_offset_side" type="number" value="0"/>
+      <br/>
+      <label for="back_right_cutout_offset_end">Back Right Cutout Offset End</label>
+      <input id="back_right_cutout_offset_end" name="back_right_cutout_offset_end" type="number" value="0"/>
+      <br/>
+      <label for="marker_width">Marker Width</label>
+      <input id="marker_width" name="marker_width" type="number" step="any" value="0.5"/>
+      <br/>
+      <label for="marker_short_mark_length">Marker Short Mark Length</label>
+      <input id="marker_short_mark_length" name="marker_short_mark_length" type="number" value="5"/>
+      <br/>
+      <label for="marker_long_mark_length">Marker Long Mark Length</label>
+      <input id="marker_long_mark_length" name="marker_long_mark_length" type="text" value="material_width"/>
+      <br/>
+      
+      
+      
+      
+      <!-- end of customizer parameters -->
 
       <div class="buttons">
         <button id="preview_button" type="submit">Update Preview</button>
