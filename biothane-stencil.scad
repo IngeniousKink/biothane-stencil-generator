@@ -96,9 +96,9 @@ marker_long_mark_length = material_width;
 
 // END OF PARAMETERS
 
-EXTRA = 5 + 5; // use to prevent z-fighting
+EXTRA = 50; // use to prevent z-fighting
 
-outer_width = material_width + wall_thickness;
+outer_width = material_width + 2*wall_thickness;
 
 if (auto_side_pane_length) {
   side_pane_length = stencil_length - 20;
@@ -113,13 +113,18 @@ combined_text_right = (
 );
 
 module measure_markings() {
-    for (pos = [0:(stencil_length/2)-1]) {
-        mark_length = (pos % 10 == 0) ? marker_long_mark_length : marker_short_mark_length;
+    for (pos = [1:stencil_length]) {
+        mark_length = (
+        
+        (pos % 10 == 0)
+          ? marker_long_mark_length
+          : marker_short_mark_length
+        );
         
         translate([
-          0,
+          material_width/2,
           pos,
-          (-EXTRA/2) + 0.5
+          (EXTRA/2) - 0.5
         
         ])
         rotate([90,90,0])
@@ -128,7 +133,11 @@ module measure_markings() {
 }
 
 module triangular_cutout(offset_side, offset_end) {
-    translate([outer_width/2, -stencil_length/2, -(wall_thickness + material_height)/2])
+    translate([
+      outer_width/2,
+      -stencil_length/2,
+      0//-(wall_thickness + material_height)/2
+    ])
     linear_extrude(height = (wall_thickness + material_height)) {
         polygon(points=[
             [0, -wall_thickness],
@@ -143,86 +152,102 @@ module biothane_stencil() {
         // base model
         cube([
           outer_width,
-          wall_thickness + stencil_length,
-          2*wall_thickness + material_height
-        ], true);
+          2*wall_thickness + stencil_length,
+          wall_thickness + material_height
+        ], false);
  
         // inner cutout
-        translate([0, 0, -(EXTRA/2)])
+        translate([wall_thickness, wall_thickness, wall_thickness])
+        
+        {
+        
         cube([
           material_width,
           stencil_length*1.0001,
           material_height + EXTRA
-        ], true);
+        ], false);
 
         // front pane cutout
         if (!include_front_pane) {
             translate([
-              0,
-              (wall_thickness + stencil_length + EXTRA)/2,
-              0
+              -(wall_thickness + EXTRA)/2,
+              -(wall_thickness + EXTRA),
+              -EXTRA/2
             ])
-            
-            union() {
-              // back pane cutout
+              // front pane cutout
               cube([
                 outer_width + EXTRA,
                 wall_thickness + EXTRA,
                 wall_thickness + material_height + EXTRA
-              ], true);
+              ], false);
               
               // inner cutout
-              translate([0, 0, (-material_height-EXTRA)/2])
+              translate([0, -stencil_length/2, 0])
               cube([
                 material_width,
                 stencil_length,
                 material_height + EXTRA
-              ], true);
+              ], false);
             
-            }
-
-            
+         
             
         }
 
         // back pane cutout
         if (!include_back_pane) {
             translate([
-              0,
-              -1 * (wall_thickness + stencil_length + EXTRA)/2,
-              0
-            ])
-            union() {
-            
+              -(wall_thickness + EXTRA)/2,
+              (stencil_length),
+              -EXTRA/2
+            ])            
               // back pane cutout
               cube([
                 outer_width + EXTRA,
                 wall_thickness + EXTRA,
                 wall_thickness + material_height + EXTRA
-              ], true);
+              ], false);
               
               // inner cutout
-              translate([0, 0, (-material_height-EXTRA)/2])
+              translate([0, stencil_length/2, 0])
               cube([
                 material_width,
                 stencil_length,
                 material_height + EXTRA
-              ], true);
+              ], false);
             
             }
+        
+        
+            // bottom pane measure cutout
+            measure_markings();        
         }
 
         // left side text cutout
-        translate([-wall_thickness/4 + (outer_width/2), 0, 0])
-        rotate([90, 180, 90])
+        translate([
+          material_width + wall_thickness*1.5,
+          stencil_length/2 + wall_thickness,
+          (wall_thickness + material_height)/2
+          
+        ])
+        rotate([90, 0, 90])
         text_module(text_left);
         
         // right side text cutout
-        translate([wall_thickness/4 - (outer_width/2), 0, 0])
+        translate([
+          wall_thickness/2,
+          stencil_length/2 + wall_thickness,
+          (wall_thickness + material_height)/2
+          
+        ])
         rotate([0, -90, 0])
         rotate([0, 0, 90])
+        rotate([0, 0, 180])
         text_module(combined_text_right);
-
+        
+        translate([
+          material_width/2 + wall_thickness,
+          stencil_length/2 + wall_thickness
+        ]) {
         // triangular edges cutout
         if (front_left_cutout == true) {
           mirror([1, 0, 0])
@@ -256,6 +281,7 @@ module biothane_stencil() {
             offset_end = back_right_cutout_offset_end
           );
         }
+        }
         
         if (holes1_enabled) {
             holes(
@@ -283,9 +309,6 @@ module biothane_stencil() {
             );
         }
 
-        // bottom pane measure cutout
-        measure_markings();
-        mirror([0,1,0]) measure_markings();
     }
     
     if($preview) {
@@ -344,34 +367,31 @@ module holes(
         (columns - 1) * column_spacing
     );
 
-    horizontal_offset = (grid_width / 2) + horizontal_offset;
-    vertical_offset = (grid_length / 2) + vertical_offset;
+    translate([
+      // Adjust x-direction for centering
+      -((grid_width / 2) + horizontal_offset - material_width / 2 - wall_thickness),
+
+      // Adjust y-direction for centering
+      -((grid_length / 2) + vertical_offset - stencil_length / 2 - wall_thickness)
+      ]
+    )
     
     // Loop through the positions and create holes
     for (i = [0:columns-1]) {
         for (j = [0:rows-1]) {
             translate([
-                // Adjust x-direction for centering
-                -horizontal_offset + row_spacing * j,
-                
-                // Adjust y-direction for centering
-                -vertical_offset + column_spacing * i,
+                row_spacing * j,
+                column_spacing * i,
             
-                // Center on the z axis
-                
             ])
             
-            {
-            translate([0,0,wall_thickness/2 + material_height/2])
             cylinder(
-              d2=diameter * diameter_top_multiplier,
-              d1=diameter,
+              d1=diameter * diameter_top_multiplier,
+              d2=diameter,
               h=wall_thickness*1.001,
               $fn=50,
-              center=true
+              center=false
             );
-
-            }
         }
     }
 }
@@ -379,7 +399,7 @@ module holes(
 
 module text_module(text) {
     color([0,1,1])
-    linear_extrude(height = text_height)
+    linear_extrude(height = wall_thickness)
     text(
       text,
       size = font_size,
@@ -389,5 +409,4 @@ module text_module(text) {
     );
 }
 
-rotate([0,180,0])
 biothane_stencil();
