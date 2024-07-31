@@ -1,0 +1,76 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "h1_chicago_screws": {
+            "holes1_columns": "1",
+            "holes1_diameter": "5"
+        },
+        "h2_loxx": {
+            "holes2_columns": "1",
+            "holes2_diameter": "12",
+            "holes2_diameter_top_multiplier": "1.4"
+        },
+        "no_holes": {
+            "holes1_enabled": "false",
+            "holes2_enabled": "false"
+        },
+        "minimal_wall_thickness": {
+            "wall_thickness": "0.40000000000000002"
+        },
+        "standard_wall_thickness": {
+            "wall_thickness": "2"
+        },
+        "covert_cuff_base_loxx_25mm": {
+            "__base__": "h1_chicago_screws,h2_loxx,minimal_wall_thickness",
+            "holes1_vertical_offset": "-10",
+            "holes1_row_spacing": "11",
+            "holes1_rows": "2",
+            "holes2_vertical_offset": "7",
+            "include_back_pane": "true",
+            "material_width": "25",
+            "stencil_length": "35",
+            "text_left": "covert cuff base LOXX"
+        },
+        "end_13mm": {
+            "__base__": "h1_chicago_screws,minimal_wall_thickness",
+            "front_left_cutout": "true",
+            "front_left_cutout_offset_side": "-10",
+            "front_right_cutout": "true",
+            "front_right_cutout_offset_side": "-10",
+            "holes1_columns": "1",
+            "holes1_vertical_offset": "-8.5",
+            "holes2_enabled": "false",
+            "include_back_pane": "true",
+            "stencil_length": "30"
+        },
+        "GENERATED_covert_cuff_base_loxx_25mm": {
+            "holes1_columns": "1",
+            "holes1_diameter": "5",
+            "holes2_columns": "1",
+            "holes2_diameter": "12",
+            "holes2_diameter_top_multiplier": "1.4",
+            "wall_thickness": "0.40000000000000002",
+            "holes1_vertical_offset": "-10",
+            "holes1_row_spacing": "11",
+            "holes1_rows": "2",
+            "holes2_vertical_offset": "7",
+            "include_back_pane": "true",
+            "material_width": "25",
+            "stencil_length": "35",
+            "text_left": "covert cuff base LOXX"
+        },
+        "GENERATED_end_13mm": {
+            "holes1_columns": "1",
+            "holes1_diameter": "5",
+            "wall_thickness": "0.40000000000000002",
+            "front_left_cutout": "true",
+            "front_left_cutout_offset_side": "-10",
+            "front_right_cutout": "true",
+            "front_right_cutout_offset_side": "-10",
+            "holes1_vertical_offset": "-8.5",
+            "holes2_enabled": "false",
+            "include_back_pane": "true",
+            "stencil_length": "30"
+        }
+    }
+}
