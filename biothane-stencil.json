@@ -15,16 +15,30 @@
             "holes2_enabled": "false"
         },
         "minimal_wall_thickness": {
-            "wall_thickness": "0.40000000000000002"
+            "wall_thickness": "0.8"
         },
         "standard_wall_thickness": {
             "wall_thickness": "2"
         },
+        "single_end": {
+            "front_left_cutout": "true",
+            "front_left_cutout_offset_side": "-10",
+            "front_left_cutout_offset_end": "3",
+            "front_right_cutout": "true",
+            "front_right_cutout_offset_side": "-10",
+            "front_right_cutout_offset_end": "3",
+            "holes1_columns": "1",
+            "holes1_vertical_offset": "-8.5",
+            "holes2_enabled": "false",
+            "include_back_pane": "true",
+            "stencil_length": "30",
+            "text_left": "single end"
+        },
         "covert_cuff_base_loxx_25mm": {
             "__base__": "h1_chicago_screws,h2_loxx,minimal_wall_thickness",
-            "holes1_vertical_offset": "-10",
             "holes1_row_spacing": "11",
             "holes1_rows": "2",
+            "holes1_vertical_offset": "-10",
             "holes2_vertical_offset": "7",
             "include_back_pane": "true",
             "material_width": "25",
@@ -32,16 +46,15 @@
             "text_left": "covert cuff base LOXX"
         },
         "end_13mm": {
-            "__base__": "h1_chicago_screws,minimal_wall_thickness",
-            "front_left_cutout": "true",
-            "front_left_cutout_offset_side": "-10",
-            "front_right_cutout": "true",
-            "front_right_cutout_offset_side": "-10",
-            "holes1_columns": "1",
-            "holes1_vertical_offset": "-8.5",
-            "holes2_enabled": "false",
-            "include_back_pane": "true",
-            "stencil_length": "30"
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end"
+        },
+        "end_19mm": {
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "material_width": "19"
+        },
+        "end_25mm": {
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "material_width": "25"
         },
         "GENERATED_covert_cuff_base_loxx_25mm": {
             "holes1_columns": "1",
@@ -49,10 +62,11 @@
             "holes2_columns": "1",
             "holes2_diameter": "12",
             "holes2_diameter_top_multiplier": "1.4",
-            "wall_thickness": "0.40000000000000002",
-            "holes1_vertical_offset": "-10",
+            "wall_thickness": "0.8",
+            "__base__": "h1_chicago_screws,h2_loxx,minimal_wall_thickness",
             "holes1_row_spacing": "11",
             "holes1_rows": "2",
+            "holes1_vertical_offset": "-10",
             "holes2_vertical_offset": "7",
             "include_back_pane": "true",
             "material_width": "25",
@@ -62,15 +76,55 @@
         "GENERATED_end_13mm": {
             "holes1_columns": "1",
             "holes1_diameter": "5",
-            "wall_thickness": "0.40000000000000002",
+            "wall_thickness": "0.8",
             "front_left_cutout": "true",
             "front_left_cutout_offset_side": "-10",
+            "front_left_cutout_offset_end": "3",
             "front_right_cutout": "true",
             "front_right_cutout_offset_side": "-10",
+            "front_right_cutout_offset_end": "3",
             "holes1_vertical_offset": "-8.5",
             "holes2_enabled": "false",
             "include_back_pane": "true",
-            "stencil_length": "30"
+            "stencil_length": "30",
+            "text_left": "single end",
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end"
+        },
+        "GENERATED_end_19mm": {
+            "holes1_columns": "1",
+            "holes1_diameter": "5",
+            "wall_thickness": "0.8",
+            "front_left_cutout": "true",
+            "front_left_cutout_offset_side": "-10",
+            "front_left_cutout_offset_end": "3",
+            "front_right_cutout": "true",
+            "front_right_cutout_offset_side": "-10",
+            "front_right_cutout_offset_end": "3",
+            "holes1_vertical_offset": "-8.5",
+            "holes2_enabled": "false",
+            "include_back_pane": "true",
+            "stencil_length": "30",
+            "text_left": "single end",
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "material_width": "19"
+        },
+        "GENERATED_end_25mm": {
+            "holes1_columns": "1",
+            "holes1_diameter": "5",
+            "wall_thickness": "0.8",
+            "front_left_cutout": "true",
+            "front_left_cutout_offset_side": "-10",
+            "front_left_cutout_offset_end": "3",
+            "front_right_cutout": "true",
+            "front_right_cutout_offset_side": "-10",
+            "front_right_cutout_offset_end": "3",
+            "holes1_vertical_offset": "-8.5",
+            "holes2_enabled": "false",
+            "include_back_pane": "true",
+            "stencil_length": "30",
+            "text_left": "single end",
+            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "material_width": "25"
         }
     }
 }

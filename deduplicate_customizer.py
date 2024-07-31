@@ -46,15 +46,15 @@ for entry_key, parameter_set in json_data["parameterSets"].items():
             else:
                 print(f'Not equal {key}: "{parameters[key]}" and "{parameter_set[key]}".', file=sys.stderr)
                 
+# Prefix for the newly generated parameter set
+generated_prefix = "GENERATED_"
 
 # Iterate over a copy of the items() since we'll be modifying the dictionary while iterating.
 for entry_key, parameter_set in json_data["parameterSets"].copy().items():
     # Check if there is a '__base__' key in the parameter set
-    if '__base__' in parameter_set:
+    if '__base__' in parameter_set and not entry_key.startswith(generated_prefix):
         # Split the '__base__' value by ',' to get a list of base keys
         base_keys = parameter_set['__base__'].split(',')
-        # Prefix for the newly generated parameter set
-        generated_prefix = "GENERATED_"
         # Name of the new parameter set
         generated_param_set_name = generated_prefix + entry_key
 
@@ -65,9 +65,6 @@ for entry_key, parameter_set in json_data["parameterSets"].copy().items():
             generated_param_set.update(json_data["parameterSets"][key])
 
         generated_param_set.update(parameter_set)
-
-        # Remove the '__base__' key from the new parameter set as it's no longer needed
-        del generated_param_set['__base__']
         
         # Add new parameter set to the json_data with the new name
         json_data["parameterSets"][generated_param_set_name] = generated_param_set
