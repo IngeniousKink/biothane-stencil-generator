@@ -1,5 +1,5 @@
 # List of model names
-MODELS := GENERATED_covert_cuff_base_loxx_25mm GENERATED_end_13mm GENERATED_end_19mm GENERATED_end_25mm
+MODELS := GENERATED_covert_cuff_base_loxx_25mm GENERATED_end_13mm GENERATED_end_19mm GENERATED_end_25mm GENERATED_double_rivet_end_19mm double_rivet_end_25mm
 
 # List of target .stl files
 STL_FILES := $(foreach model,$(MODELS),$(model).stl)

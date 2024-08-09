@@ -98,6 +98,8 @@ marker_long_mark_length = material_width;
 
 EXTRA = 50; // use to prevent z-fighting
 
+__base__ = "not used here";
+
 outer_width = material_width + 2*wall_thickness;
 
 if (auto_side_pane_length) {
