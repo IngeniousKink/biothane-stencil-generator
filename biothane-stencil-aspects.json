@@ -21,6 +21,15 @@
         "standard_wall_thickness": {
             "wall_thickness": "2"
         },
+        "front_cutouts": {
+            "back_left_cutout": "true",
+            "back_left_cutout_offset_side": "-2",
+            "back_left_cutout_offset_end": "2",
+            "back_right_cutout": "true",
+            "back_right_cutout_offset_side": "-2",
+            "back_right_cutout_offset_end": "2",
+            "include_front_pane": "true"
+        },
         "single_end": {
             "front_left_cutout": "true",
             "front_left_cutout_offset_side": "-10",
@@ -35,26 +44,40 @@
             "stencil_length": "30",
             "text_left": "single end"
         },
+        "covert_cuff_base_snaps_25mm": {
+            "__base__": "h1_chicago_screws,standard_wall_thickness,front_cutouts",
+            "holes1_row_spacing": "12.5",
+            "holes1_column_spacing": "12.5",
+            "holes1_vertical_offset": "8.5",
+            "holes1_rows": "2",
+            "holes1_columns": "2",
+            "holes2_enabled": "false",
+            "material_width": "25",
+            "stencil_length": "50",
+            "text_left": "covert cuff base snaps"
+        },
         "covert_cuff_base_loxx_25mm": {
-            "__base__": "h1_chicago_screws,h2_loxx,minimal_wall_thickness",
+            "__base__": "h1_chicago_screws,h2_loxx,standard_wall_thickness",
             "holes1_row_spacing": "11",
             "holes1_rows": "2",
+            "holes1_columns": "1",
             "holes1_vertical_offset": "-10",
             "holes2_vertical_offset": "7",
+            "holes2_columns": "1",
             "include_back_pane": "true",
             "material_width": "25",
             "stencil_length": "35",
             "text_left": "covert cuff base LOXX"
         },
         "end_13mm": {
-            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end"
+            "__base__": "h1_chicago_screws,standard_wall_thickness,single_end"
         },
         "end_19mm": {
-            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "__base__": "h1_chicago_screws,standard_wall_thickness,single_end",
             "material_width": "19"
         },
         "end_25mm": {
-            "__base__": "h1_chicago_screws,minimal_wall_thickness,single_end",
+            "__base__": "h1_chicago_screws,standard_wall_thickness,single_end",
             "material_width": "25"
         },
         "double_rivet_end_19mm": {
