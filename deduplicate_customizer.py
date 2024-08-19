@@ -1,8 +1,14 @@
 import json
 import sys
 
+with open('biothane-stencil-aspects.json', 'r') as aspects_json_file:
+    aspects_data = json.load(aspects_json_file)
+
+with open('biothane-stencil.json', 'r') as models_json_file:
+    models_data = json.load(models_json_file)
+
 # Read and collect parameters from the .scad file
-parameters = {}
+scad_file_parameters = {}
 with open('biothane-stencil.scad', 'r') as file:
     collect_parameters = False
     for line in file:
@@ -19,55 +25,57 @@ with open('biothane-stencil.scad', 'r') as file:
             key, value = line.split("=", 1)
             key = key.strip()
             value = value.split(";", 1)[0].strip().strip('"')
-            parameters[key] = value
-
+            scad_file_parameters[key] = value
 
 print('Collected the following default parameters', file=sys.stderr)
-for param_key, param_value in parameters.items():
+for param_key, param_value in scad_file_parameters.items():
     print(f'{param_key}: {param_value}', file=sys.stderr)
 
-# Read the JSON file
-with open('biothane-stencil.json', 'r') as json_file:
-    json_data = json.load(json_file)
-
-# Iterate over all entries in parameterSets
-for entry_key, parameter_set in json_data["parameterSets"].items():
+for entry_key, parameter_set in aspects_data["parameterSets"].items():
     # Iterate over a list of the keys since we'll be modifying the dictionary
     for key in list(parameter_set.keys()):  # list() creates a copy of the keys
         # Delete entries that match the values in the collected parameters
         if "EXTRA" in parameter_set:
             del parameter_set["EXTRA"]
-        if key in parameters: 
-            print(f'Comparing {key}: "{parameters[key]}" and "{parameter_set[key]}".', file=sys.stderr)
-            if parameters[key] == parameter_set[key]:
+        if key in scad_file_parameters: 
+            print(f'Comparing {key}: "{scad_file_parameters[key]}" and "{parameter_set[key]}".', file=sys.stderr)
+            if scad_file_parameters[key] == parameter_set[key]:
                 del parameter_set[key]
-            elif parameters[key] == "0.0" and parameter_set[key] == "0":
+            elif scad_file_parameters[key] == "0.0" and parameter_set[key] == "0":
                 del parameter_set[key]
             else:
-                print(f'Not equal {key}: "{parameters[key]}" and "{parameter_set[key]}".', file=sys.stderr)
+                print(f'Not equal {key}: "{scad_file_parameters[key]}" and "{parameter_set[key]}".', file=sys.stderr)
+
+output_data = {
+    "fileFormatVersion": "1",
+    "parameterSets": {}
+}
                 
-# Prefix for the newly generated parameter set
-generated_prefix = "GENERATED_"
-
 # Iterate over a copy of the items() since we'll be modifying the dictionary while iterating.
-for entry_key, parameter_set in json_data["parameterSets"].copy().items():
+for entry_key, parameter_set in aspects_data["parameterSets"].copy().items():
     # Check if there is a '__base__' key in the parameter set
-    if '__base__' in parameter_set and not entry_key.startswith(generated_prefix):
-        # Split the '__base__' value by ',' to get a list of base keys
-        base_keys = parameter_set['__base__'].split(',')
-        # Name of the new parameter set
-        generated_param_set_name = generated_prefix + entry_key
+    if '__base__' not in parameter_set:
+        continue
 
-        # Create the new parameter set by first adding the base key-values
-        generated_param_set = {}
-        # Update the new parameter set with the original parameter set values
-        for key in base_keys:
-            generated_param_set.update(json_data["parameterSets"][key])
+    # Split the '__base__' value by ',' to get a list of base keys
+    base_keys = parameter_set['__base__'].split(',')
+    # Name of the new parameter set
+    generated_param_set_name = entry_key
 
-        generated_param_set.update(parameter_set)
-        
-        # Add new parameter set to the json_data with the new name
-        json_data["parameterSets"][generated_param_set_name] = generated_param_set
+    # Create the new parameter set by first adding the base key-values
+    generated_param_set = {}
+    # Update the new parameter set with the original parameter set values
+    for key in base_keys:
+        generated_param_set.update(aspects_data["parameterSets"][key])
 
-# Pretty print the JSON to console with the matching parameters removed
-print(json.dumps(json_data, indent=4))
+    generated_param_set.update(parameter_set)
+    
+    # Add new parameter set to the aspects_data with the new name
+    output_data["parameterSets"][generated_param_set_name] = generated_param_set.copy()
+    del output_data["parameterSets"][generated_param_set_name]['__base__']
+
+with open('biothane-stencil-aspects.json', 'w') as aspects_file:
+    json.dump(aspects_data, aspects_file, indent=4)
+
+with open('biothane-stencil.json', 'w') as output_file:
+    json.dump(output_data, output_file, indent=4)
