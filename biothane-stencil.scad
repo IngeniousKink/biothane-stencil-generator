@@ -40,6 +40,8 @@ holes1_vertical_offset = 0.0; // .01
 holes1_diameter_top_multiplier = 1.3; // .1
 holes1_rivet_inner_diameter = 4.5; // .01
 
+holes1_anvil_guide = 0;
+
 /* [Holes (second set)] */
 // enable this set of holes
 holes2_enabled = true;
@@ -54,6 +56,8 @@ holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
 holes2_diameter_top_multiplier = 1.3; // .1
 holes2_rivet_inner_diameter = 4.5; // .01
+
+holes2_anvil_guide = 0;
 
 /* [text text_left] */
 text_left = "biothane-stencil-generator";
@@ -149,14 +153,103 @@ module triangular_cutout(offset_side, offset_end) {
     }
 }
 
+module anvil_guide() {
+
+  if (holes1_anvil_guide > 0 || holes2_anvil_guide > 0) {
+
+  anvil_guide_height = wall_thickness + material_height;
+  
+  translate([0,0, - anvil_guide_height]) // move it below the base plate
+
+  difference() {
+    // anvil guide base plate  + wall
+    union() { 
+      // extra base plate
+      cube([
+        outer_width,
+        2*wall_thickness + stencil_length,
+        anvil_guide_height
+      ], false);
+    
+      // wall around the anvil guides
+
+      if (holes1_enabled && holes1_anvil_guide > 0) {
+        holes(
+            diameter = holes1_anvil_guide + wall_thickness,
+            columns = holes1_columns,
+            rows = holes1_rows,
+            column_spacing = holes1_column_spacing,
+            row_spacing = holes1_row_spacing,
+            horizontal_offset = holes1_horizontal_offset,
+            vertical_offset = holes1_vertical_offset,
+            diameter_top_multiplier = 1,
+            h = anvil_guide_height
+        );
+      }
+
+      if (holes2_enabled && holes2_anvil_guide > 0) {
+        holes(
+            diameter = holes2_anvil_guide + wall_thickness,
+            columns = holes2_columns,
+            rows = holes2_rows,
+            column_spacing = holes2_column_spacing,
+            row_spacing = holes2_row_spacing,
+            horizontal_offset = holes2_horizontal_offset,
+            vertical_offset = holes2_vertical_offset,
+            diameter_top_multiplier = 1,
+            h = anvil_guide_height
+        );
+      }
+
+    }
+    
+    translate([0,0,anvil_guide_height * -0.5]) {
+    // anvil guide cutouts
+    if (holes1_enabled && holes1_anvil_guide > 0) {
+      holes(
+          diameter = holes1_anvil_guide,
+          columns = holes1_columns,
+          rows = holes1_rows,
+          column_spacing = holes1_column_spacing,
+          row_spacing = holes1_row_spacing,
+          horizontal_offset = holes1_horizontal_offset,
+          vertical_offset = holes1_vertical_offset,
+          diameter_top_multiplier = 1,
+          h = anvil_guide_height * 1.5
+      );
+    }
+
+    if (holes2_enabled && holes2_anvil_guide > 0) {
+      holes(
+          diameter = holes2_anvil_guide,
+          columns = holes2_columns,
+          rows = holes2_rows,
+          column_spacing = holes2_column_spacing,
+          row_spacing = holes2_row_spacing,
+          horizontal_offset = holes2_horizontal_offset,
+          vertical_offset = holes2_vertical_offset,
+          diameter_top_multiplier = 1,
+          h = anvil_guide_height * 1.5
+      );
+    }
+  }
+  }
+  }
+}
+
 module biothane_stencil() {
     difference() {
-        // base model
-        cube([
-          outer_width,
-          2*wall_thickness + stencil_length,
-          wall_thickness + material_height
-        ], false);
+        union() {
+        
+          // base model
+          cube([
+            outer_width,
+            2*wall_thickness + stencil_length,
+            wall_thickness + material_height
+          ], false);
+        
+          anvil_guide();
+        }
  
         // inner cutout
         translate([wall_thickness, wall_thickness, wall_thickness])
@@ -296,6 +389,8 @@ module biothane_stencil() {
                 vertical_offset = holes1_vertical_offset,
                 diameter_top_multiplier = holes1_diameter_top_multiplier,
             );
+            
+            
         }
 
         if (holes2_enabled) {
@@ -313,6 +408,7 @@ module biothane_stencil() {
 
     }
     
+    /*
     if($preview) {
     // visualize material
     
@@ -349,6 +445,7 @@ module biothane_stencil() {
             );
        }       
     }
+    */
 }
 
 module holes(
@@ -360,6 +457,7 @@ module holes(
     horizontal_offset = 0.0,
     vertical_offset = 0.0,
     diameter_top_multiplier = 1.5,
+    h = wall_thickness*1.001,
 ) {
     grid_width = (
         (rows - 1) * row_spacing
@@ -390,7 +488,7 @@ module holes(
             cylinder(
               d1=diameter * diameter_top_multiplier,
               d2=diameter,
-              h=wall_thickness*1.001,
+              h=h,
               $fn=50,
               center=false
             );
