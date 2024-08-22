@@ -138,17 +138,17 @@ hole_sets = [
 
     // Hole set 1:
     [
-        holes1_enabled,
-        holes1_diameter,
-        holes1_diameter_top_multiplier,
-        holes1_columns,
-        holes1_rows,
-        holes1_column_spacing,
-        holes1_row_spacing,
-        holes1_horizontal_offset,
-        holes1_vertical_offset,
-        holes1_rivet_inner_diameter,
-        holes1_anvil_guide
+        holes1_enabled,                 // [0]
+        holes1_diameter,                // [1]
+        holes1_diameter_top_multiplier, // [2]
+        holes1_columns,                 // [3]
+        holes1_rows,                    // [4]
+        holes1_column_spacing,          // [5]
+        holes1_row_spacing,             // [6]
+        holes1_horizontal_offset,       // [7]
+        holes1_vertical_offset,         // [8]
+        holes1_rivet_inner_diameter,    // [9]
+        holes1_anvil_guide              // [10]
     ],
     // Hole set 2:
     [
@@ -206,7 +206,7 @@ module triangular_cutout(offset_side, offset_end) {
 
 module anvil_guide() {
 
-  if (holes1_anvil_guide > 0 || holes2_anvil_guide > 0) {
+  if (hole_sets[0][10/*.anvil_guide*/] > 0 || hole_sets[1][10/*.anvil_guide*/] > 0) {
 
   anvil_guide_height = wall_thickness + material_height;
   
@@ -224,31 +224,21 @@ module anvil_guide() {
     
       // wall around the anvil guides
 
-      if (holes1_enabled && holes1_anvil_guide > 0) {
-        holes(
-            diameter = holes1_anvil_guide + wall_thickness,
-            columns = holes1_columns,
-            rows = holes1_rows,
-            column_spacing = holes1_column_spacing,
-            row_spacing = holes1_row_spacing,
-            horizontal_offset = holes1_horizontal_offset,
-            vertical_offset = holes1_vertical_offset,
-            diameter_top_multiplier = 1,
-            h = anvil_guide_height
+      if (hole_sets[0][0/*.enabled*/] && hole_sets[0][10/*.anvil_guide*/] > 0) {
+        holes_from_set(
+            hole_sets[0],
+            _diameter = hole_sets[0][10/*.anvil_guide*/] + wall_thickness,
+            _height = anvil_guide_height,
+            _diameter_top_multiplier = 1,
         );
       }
 
-      if (holes2_enabled && holes2_anvil_guide > 0) {
-        holes(
-            diameter = holes2_anvil_guide + wall_thickness,
-            columns = holes2_columns,
-            rows = holes2_rows,
-            column_spacing = holes2_column_spacing,
-            row_spacing = holes2_row_spacing,
-            horizontal_offset = holes2_horizontal_offset,
-            vertical_offset = holes2_vertical_offset,
-            diameter_top_multiplier = 1,
-            h = anvil_guide_height
+      if (hole_sets[1][0/*.enabled*/] && hole_sets[1][10/*.anvil_guide*/] > 0) {
+        holes_from_set(
+            hole_sets[1],
+            _diameter = hole_sets[1][10/*.anvil_guide*/] + wall_thickness,
+            _height = anvil_guide_height,
+            _diameter_top_multiplier = 1,
         );
       }
 
@@ -256,32 +246,22 @@ module anvil_guide() {
     
     translate([0,0,anvil_guide_height * -0.5]) {
     // anvil guide cutouts
-    if (holes1_enabled && holes1_anvil_guide > 0) {
-      holes(
-          diameter = holes1_anvil_guide,
-          columns = holes1_columns,
-          rows = holes1_rows,
-          column_spacing = holes1_column_spacing,
-          row_spacing = holes1_row_spacing,
-          horizontal_offset = holes1_horizontal_offset,
-          vertical_offset = holes1_vertical_offset,
-          diameter_top_multiplier = 1,
-          h = anvil_guide_height * 1.5
-      );
+    if (hole_sets[0][0/*.enabled*/] && hole_sets[0][10/*.anvil_guide*/] > 0) {
+      holes_from_set(
+            hole_sets[0],
+            _diameter = hole_sets[0][10/*.anvil_guide*/],
+            _height = anvil_guide_height * 1.5,
+            _diameter_top_multiplier = 1,
+        );
     }
 
-    if (holes2_enabled && holes2_anvil_guide > 0) {
-      holes(
-          diameter = holes2_anvil_guide,
-          columns = holes2_columns,
-          rows = holes2_rows,
-          column_spacing = holes2_column_spacing,
-          row_spacing = holes2_row_spacing,
-          horizontal_offset = holes2_horizontal_offset,
-          vertical_offset = holes2_vertical_offset,
-          diameter_top_multiplier = 1,
-          h = anvil_guide_height * 1.5
-      );
+    if (hole_sets[1][0/*.enabled*/] && hole_sets[1][10/*.anvil_guide*/] > 0) {
+      holes_from_set(
+            hole_sets[1],
+            _diameter = hole_sets[1][10/*.anvil_guide*/],
+            _height = anvil_guide_height * 1.5,
+            _diameter_top_multiplier = 1,
+        );
     }
   }
   }
@@ -437,105 +417,20 @@ module biothane_stencil() {
             holes_from_set(hole_sets[1]);
         }
     }
-    
-    /*
-    if($preview) {
-    // visualize material
-    
-    
-    // visualize rivets
-    if (holes1_enabled) {
-       translate([0,0,-wall_thickness])
-       color("silver")
-       scale([0,0,3])
-       holes(
-                diameter = holes1_rivet_inner_diameter,
-                columns = holes1_columns,
-                rows = holes1_rows,
-                column_spacing = holes1_column_spacing,
-                row_spacing = holes1_row_spacing,
-                horizontal_offset = holes1_horizontal_offset,
-                vertical_offset = holes1_vertical_offset,
-                diameter_top_multiplier = 1,
-            );
-       }
-       
-    if (holes2_enabled) {
-       translate([0,0,-wall_thickness])
-       color("silver")
-       holes(
-                diameter = holes2_rivet_inner_diameter,
-                columns = holes2_columns,
-                rows = holes2_rows,
-                column_spacing = holes2_column_spacing,
-                row_spacing = holes2_row_spacing,
-                horizontal_offset = holes2_horizontal_offset,
-                vertical_offset = holes2_vertical_offset,
-                diameter_top_multiplier = 1,
-            );
-       }       
-    }
-    */
+
 }
 
-module holes(
-    diameter = 6.5,
-    columns = 3,
-    rows = 1,
-    column_spacing = 10,
-    row_spacing = 20,
-    horizontal_offset = 0.0,
-    vertical_offset = 0.0,
-    diameter_top_multiplier = 1.5,
-    h = wall_thickness*1.001,
-) {
-    grid_width = (
-        (rows - 1) * row_spacing
-    );
+module holes_from_set(hole_set, _diameter = -1, _height = -1, _diameter_top_multiplier = -1) {
+    diameter = (_diameter > -1) ? _diameter : hole_set[1];
+    diameter_top_multiplier = (_diameter_top_multiplier > -1) ? _diameter_top_multiplier : hole_set[2];
 
-    grid_length = (
-        (columns - 1) * column_spacing
-    );
-
-    translate([
-      // Adjust x-direction for centering
-      -((grid_width / 2) + horizontal_offset - material_width / 2 - wall_thickness),
-
-      // Adjust y-direction for centering
-      -((grid_length / 2) + vertical_offset - stencil_length / 2 - wall_thickness)
-      ]
-    )
-    
-    // Loop through the positions and create holes
-    for (i = [0:columns-1]) {
-        for (j = [0:rows-1]) {
-            translate([
-                row_spacing * j,
-                column_spacing * i,
-            
-            ])
-            
-            cylinder(
-              d1=diameter * diameter_top_multiplier,
-              d2=diameter,
-              h=h,
-              $fn=50,
-              center=false
-            );
-        }
-    }
-}
-
-module holes_from_set(hole_set) {
-    diameter = hole_set[1];
-    diameter_top_multiplier = hole_set[2];
     columns = hole_set[3];
     rows = hole_set[4];
     column_spacing = hole_set[5];
     row_spacing = hole_set[6];
     horizontal_offset = hole_set[7];
     vertical_offset = hole_set[8];
-    h = wall_thickness * 1.001;
+    h = (_height > -1) ? _height : wall_thickness * 1.001;
 
     grid_width = (rows - 1) * row_spacing;
     grid_length = (columns - 1) * column_spacing;
