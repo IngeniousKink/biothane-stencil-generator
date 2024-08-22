@@ -118,6 +118,57 @@ combined_text_right = (
   : text_right
 );
 
+hole_sets = [
+    /*
+     [
+      enabled,
+      diameter,
+      diameter_top_multiplier,
+      columns,
+      rows,
+      column spacing,
+      row spacing,
+      horizontal offset,
+      vertical offset,
+      rivet inner diameter,
+      anvil guide
+      ]
+    */
+
+
+    // Hole set 1:
+    [
+        holes1_enabled,
+        holes1_diameter,
+        holes1_diameter_top_multiplier,
+        holes1_columns,
+        holes1_rows,
+        holes1_column_spacing,
+        holes1_row_spacing,
+        holes1_horizontal_offset,
+        holes1_vertical_offset,
+        holes1_rivet_inner_diameter,
+        holes1_anvil_guide
+    ],
+    // Hole set 2:
+    [
+        holes2_enabled,
+        holes2_diameter,
+        holes2_diameter_top_multiplier,
+        holes2_columns,
+        holes2_rows,
+        holes2_column_spacing,
+        holes2_row_spacing,
+        holes2_horizontal_offset,
+        holes2_vertical_offset,
+        holes2_rivet_inner_diameter,
+        holes2_anvil_guide
+    ],
+    // ... add additional hole sets here ...
+];
+
+
+
 module measure_markings() {
     for (pos = [1:stencil_length]) {
         mark_length = (
@@ -378,34 +429,13 @@ module biothane_stencil() {
         }
         }
         
-        if (holes1_enabled) {
-            holes(
-                diameter = holes1_diameter,
-                columns = holes1_columns,
-                rows = holes1_rows,
-                column_spacing = holes1_column_spacing,
-                row_spacing = holes1_row_spacing,
-                horizontal_offset = holes1_horizontal_offset,
-                vertical_offset = holes1_vertical_offset,
-                diameter_top_multiplier = holes1_diameter_top_multiplier,
-            );
-            
-            
+        if (hole_sets[0][0/*.enabled*/]) {
+            holes_from_set(hole_sets[0]);
         }
 
-        if (holes2_enabled) {
-            holes(
-                diameter = holes2_diameter,
-                columns = holes2_columns,
-                rows = holes2_rows,
-                column_spacing = holes2_column_spacing,
-                row_spacing = holes2_row_spacing,
-                horizontal_offset = holes2_horizontal_offset,
-                vertical_offset = holes2_vertical_offset,
-                diameter_top_multiplier = holes2_diameter_top_multiplier,
-            );
+        if (hole_sets[1][0/*.enabled*/]) {
+            holes_from_set(hole_sets[1]);
         }
-
     }
     
     /*
@@ -491,6 +521,48 @@ module holes(
               h=h,
               $fn=50,
               center=false
+            );
+        }
+    }
+}
+
+module holes_from_set(hole_set) {
+    diameter = hole_set[1];
+    diameter_top_multiplier = hole_set[2];
+    columns = hole_set[3];
+    rows = hole_set[4];
+    column_spacing = hole_set[5];
+    row_spacing = hole_set[6];
+    horizontal_offset = hole_set[7];
+    vertical_offset = hole_set[8];
+    h = wall_thickness * 1.001;
+
+    grid_width = (rows - 1) * row_spacing;
+    grid_length = (columns - 1) * column_spacing;
+
+    translate([
+        // Adjust x-direction for centering
+        -((grid_width / 2) + horizontal_offset - material_width / 2 - wall_thickness),
+
+        // Adjust y-direction for centering
+        -((grid_length / 2) + vertical_offset - stencil_length / 2 - wall_thickness)
+    ])
+    
+    // Loop through the positions and create holes
+    for (i = [0:columns-1]) {
+        for (j = [0:rows-1]) {
+            translate([
+                row_spacing * j,
+                column_spacing * i,
+            
+            ])
+            
+            cylinder(
+                d1=diameter * diameter_top_multiplier,
+                d2=diameter,
+                h=h,
+                $fn=50,
+                center=false
             );
         }
     }
