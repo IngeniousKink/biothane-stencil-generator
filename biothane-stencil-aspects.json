@@ -101,7 +101,7 @@
             "holes1_diameter": "6",
             "holes1_row_spacing": "12.5",
             "holes1_rows": "2",
-            "holes1_vertical_offset": "25",
+            "holes1_vertical_offset": "28",
             "holes1_anvil_guide": "25",
             "holes1_diameter_top_multiplier": "1",
             "holes2_columns": "1",
@@ -114,7 +114,8 @@
             "include_back_pane": "true",
             "material_width": "25",
             "text_left": "double rivet end",
-            "wall_thickness": "2"
+            "wall_thickness": "2",
+            "extra_width": "6"
         }
     }
 }

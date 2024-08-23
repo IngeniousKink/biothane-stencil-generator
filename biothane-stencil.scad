@@ -98,13 +98,15 @@ marker_width = 0.5;
 marker_short_mark_length = 5;
 marker_long_mark_length = material_width;
 
+extra_width = 0;
+
 // END OF PARAMETERS
 
 EXTRA = 50; // use to prevent z-fighting
 
 __base__ = "not used here";
 
-outer_width = material_width + 2*wall_thickness;
+outer_width = material_width + 2*wall_thickness + 2 * extra_width;
 
 if (auto_side_pane_length) {
   side_pane_length = stencil_length - 20;
@@ -216,6 +218,7 @@ module anvil_guide() {
     // anvil guide base plate  + wall
     union() { 
       // extra base plate
+      translate([-extra_width, 0, 0])
       cube([
         outer_width,
         2*wall_thickness + stencil_length,
@@ -273,6 +276,8 @@ module biothane_stencil() {
         union() {
         
           // base model
+
+          translate([-extra_width, 0, 0])
           cube([
             outer_width,
             2*wall_thickness + stencil_length,
@@ -350,7 +355,7 @@ module biothane_stencil() {
 
         // left side text cutout
         translate([
-          material_width + wall_thickness*1.5,
+          material_width + wall_thickness*1.5 + extra_width,
           stencil_length/2 + wall_thickness,
           (wall_thickness + material_height)/2
           
@@ -360,7 +365,7 @@ module biothane_stencil() {
         
         // right side text cutout
         translate([
-          wall_thickness/2,
+          (wall_thickness/2) - extra_width,
           stencil_length/2 + wall_thickness,
           (wall_thickness + material_height)/2
           
