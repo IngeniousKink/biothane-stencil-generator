@@ -210,7 +210,7 @@ module anvil_guide() {
 
   if (hole_sets[0][10/*.anvil_guide*/] > 0 || hole_sets[1][10/*.anvil_guide*/] > 0) {
 
-  anvil_guide_height = wall_thickness + material_height;
+  anvil_guide_height = 0; //wall_thickness + material_height;
   
   translate([0,0, - anvil_guide_height]) // move it below the base plate
 
