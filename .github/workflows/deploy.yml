@@ -34,18 +34,20 @@ jobs:
       - name: Checkout openscad-configurator
         uses: actions/checkout@v4
         with:
-          repository: IngeniousKink/openscad-configurator
-          path: openscad-configurator
-      - name: cp -v index.html *.scad ./openscad-configurator/configurator
-        run: cp -v index.html *.scad ./openscad-configurator/configurator
-      - name: cd openscad-configurator && make
-        run: cd openscad-configurator && make
+          repository: IngeniousKink/biothane-stencil-generator-playground
+          path: biothane-stencil-generator-playground
+      - name: cd biothane-stencil-generator-playground && make
+        run: cd biothane-stencil-generator-playground && make
+      - name: generateDefaultSources.js
+        run: node ./biothane-stencil-generator-playground/generateDefaultSources.js *.scad > biothane-stencil-generator-playground/src/state/default-sources.ts
+      - name: cd biothane-stencil-generator-playground && npm run build
+        run: cd biothane-stencil-generator-playground && npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './openscad-configurator/configurator/'
+          path: './biothane-stencil-generator-playground/public/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
