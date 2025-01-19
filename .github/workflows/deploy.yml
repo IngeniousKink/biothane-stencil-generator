@@ -44,6 +44,8 @@ jobs:
         run: cd biothane-stencil-generator-playground && npm install && npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Fix symlinks
+        run: rm -v ./biothane-stencil-generator-playground/public/openscad.{js,wasm} && cp -v ./biothane-stencil-generator-playground/libs/openscad-wasm/openscad/openscad.{js,wasm} ./biothane-stencil-generator-playground/public/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
