@@ -1,3 +1,4 @@
 *.stl
 dist
 biothane-stencil-generator-playground/
+.DS_Store

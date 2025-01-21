@@ -3,7 +3,7 @@ use <biothane-stencil.scad>
 use <custom.scad>
 use <properties.scad>
 use <aspects.scad>
-use <covert_cuff_base_loxx_25mm.scad>
+use <stencil_covert_cuff_base_loxx_25mm.scad>
 
 union() {
 
