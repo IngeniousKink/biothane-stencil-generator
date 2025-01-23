@@ -1,6 +1,5 @@
 use <biothane-stencil.scad>
 use <custom.scad>
-use <properties.scad>
 
 function long() = [
   "stencil_length", 150
