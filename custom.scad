@@ -1,5 +1,4 @@
 use <biothane-stencil.scad>
-use <properties.scad>
 
 // PARAMETERS
 /* [general dimensions] */
