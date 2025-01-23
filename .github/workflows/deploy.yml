@@ -39,7 +39,7 @@ jobs:
       - name: cd biothane-stencil-generator-playground && make
         run: cd biothane-stencil-generator-playground && make
       - name: generateDefaultSources.js
-        run: npm install glob && node ./biothane-stencil-generator-playground/generateDefaultSources.js stencil_basic.scad *.scad > biothane-stencil-generator-playground/src/state/default-sources.ts
+        run: npm install glob && node ./biothane-stencil-generator-playground/generateDefaultSources.js stencil-basic.scad *.scad > biothane-stencil-generator-playground/src/state/default-sources.ts
       - name: cd biothane-stencil-generator-playground && npm install && npm run build 
         run: cd biothane-stencil-generator-playground && npm install && npm run build
       - name: Setup Pages

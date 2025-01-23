@@ -1,6 +1,5 @@
 use <biothane-stencil.scad>
-use <custom.scad>
-use <properties.scad>
+use <defaults.scad>
 use <aspects.scad>
 
 function double_rivet_end_25mm() = concat(

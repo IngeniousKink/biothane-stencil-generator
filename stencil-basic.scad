@@ -1,6 +1,6 @@
 
 use <biothane-stencil.scad>
-use <custom.scad>
+use <defaults.scad>
 use <aspects.scad>
 
 union() {

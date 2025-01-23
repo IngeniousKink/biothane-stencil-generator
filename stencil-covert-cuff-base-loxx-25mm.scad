@@ -1,6 +1,5 @@
 use <biothane-stencil.scad>
-use <custom.scad>
-use <properties.scad>
+use <defaults.scad>
 use <aspects.scad>
 
 function covert_cuff_base_loxx_25mm() = concat(

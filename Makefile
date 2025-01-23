@@ -4,11 +4,11 @@ STL_DIR := dist/stl
 PNG_DIR := dist/png
 
 # Find all .scad files in the source directory
-SCAD_FILES := $(wildcard $(SCAD_DIR)/stencil_*.scad)
+SCAD_FILES := $(wildcard $(SCAD_DIR)/stencil-*.scad)
 
 # Generate corresponding STL and PNG filenames
-STL_FILES := $(patsubst $(SCAD_DIR)/stencil_%.scad,$(STL_DIR)/%.stl,$(SCAD_FILES))
-PNG_FILES := $(patsubst $(SCAD_DIR)/stencil_%.scad,$(PNG_DIR)/%.png,$(SCAD_FILES))
+STL_FILES := $(patsubst $(SCAD_DIR)/stencil-%.scad,$(STL_DIR)/%.stl,$(SCAD_FILES))
+PNG_FILES := $(patsubst $(SCAD_DIR)/stencil-%.scad,$(PNG_DIR)/%.png,$(SCAD_FILES))
 
 # Ensure output directories exist
 $(shell mkdir -p $(STL_DIR) $(PNG_DIR))
@@ -17,11 +17,11 @@ $(shell mkdir -p $(STL_DIR) $(PNG_DIR))
 all: $(STL_FILES) $(PNG_FILES)
 
 # Rule for creating .stl files from .scad files
-$(STL_DIR)/%.stl: $(SCAD_DIR)/stencil_%.scad
+$(STL_DIR)/%.stl: $(SCAD_DIR)/stencil-%.scad
 	openscad --enable manifold -o $@ $<
 
 # Rule for creating .png files from .scad files
-$(PNG_DIR)/%.png: $(SCAD_DIR)/stencil_%.scad
+$(PNG_DIR)/%.png: $(SCAD_DIR)/stencil-%.scad
 	openscad --render png --imgsize 1280,1280 --enable manifold -o $@ $<
 
 # Clean target to remove generated files
