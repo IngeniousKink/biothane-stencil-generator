@@ -124,30 +124,6 @@ module biothane_stencil(properties) {
     wall_thickness = get_property(properties, "wall_thickness");
     auto_side_pane_length = get_property(properties, "auto_side_pane_length");
 
-    holes1_enabled = get_property(properties, "holes1_enabled");
-    holes1_diameter = get_property(properties, "holes1_diameter");
-    holes1_columns = get_property(properties, "holes1_columns");
-    holes1_rows = get_property(properties, "holes1_rows");
-    holes1_column_spacing = get_property(properties, "holes1_column_spacing");
-    holes1_row_spacing = get_property(properties, "holes1_row_spacing");
-    holes1_horizontal_offset = get_property(properties, "holes1_horizontal_offset");
-    holes1_vertical_offset = get_property(properties, "holes1_vertical_offset");
-    holes1_diameter_top_multiplier = get_property(properties, "holes1_diameter_top_multiplier");
-    holes1_rivet_inner_diameter = get_property(properties, "holes1_rivet_inner_diameter");
-    holes1_anvil_guide = get_property(properties, "holes1_anvil_guide");
-
-    holes2_enabled = get_property(properties, "holes2_enabled");
-    holes2_diameter = get_property(properties, "holes2_diameter");
-    holes2_columns = get_property(properties, "holes2_columns");
-    holes2_rows = get_property(properties, "holes2_rows");
-    holes2_column_spacing = get_property(properties, "holes2_column_spacing");
-    holes2_row_spacing = get_property(properties, "holes2_row_spacing");
-    holes2_horizontal_offset = get_property(properties, "holes2_horizontal_offset");
-    holes2_vertical_offset = get_property(properties, "holes2_vertical_offset");
-    holes2_diameter_top_multiplier = get_property(properties, "holes2_diameter_top_multiplier");
-    holes2_rivet_inner_diameter = get_property(properties, "holes2_rivet_inner_diameter");
-    holes2_anvil_guide = get_property(properties, "holes2_anvil_guide");
-
     text_left = get_property(properties, "text_left");
     text_right = get_property(properties, "text_right");
     font_size = get_property(properties, "font_size");
@@ -177,58 +153,33 @@ module biothane_stencil(properties) {
     
     marker_long_mark_length = material_width;
 
-    hole_sets = [
-    /*
-     [
-      enabled,
-      diameter,
-      diameter_top_multiplier,
-      columns,
-      rows,
-      column spacing,
-      row spacing,
-      horizontal offset,
-      vertical offset,
-      rivet inner diameter,
-      anvil guide
+    hole_set_count = max(
+      [
+        for (i = [1:100]) (
+          get_property(properties, str("holes", i, "_enabled")) != undef
+        )
+        ? i 
+        : 0
       ]
-    */
+    );
 
-
-    // Hole set 1:
-    [
-        holes1_enabled,                 // [0]
-        holes1_diameter,                // [1]
-        holes1_diameter_top_multiplier, // [2]
-        holes1_columns,                 // [3]
-        holes1_rows,                    // [4]
-        holes1_column_spacing,          // [5]
-        holes1_row_spacing,             // [6]
-        holes1_horizontal_offset,       // [7]
-        holes1_vertical_offset,         // [8]
-        holes1_rivet_inner_diameter,    // [9]
-        holes1_anvil_guide              // [10]
-    ],
-    // Hole set 2:
-    [
-        holes2_enabled,
-        holes2_diameter,
-        holes2_diameter_top_multiplier,
-        holes2_columns,
-        holes2_rows,
-        holes2_column_spacing,
-        holes2_row_spacing,
-        holes2_horizontal_offset,
-        holes2_vertical_offset,
-        holes2_rivet_inner_diameter,
-        holes2_anvil_guide
-    ],
-    // ... add additional hole sets here ...
-];
-
-
-
-
+    hole_sets = [
+        for (i = [1:hole_set_count]) [
+            get_property(properties, str("holes", i, "_enabled")),
+            get_property(properties, str("holes", i, "_diameter")),
+            get_property(properties, str("holes", i, "_diameter_top_multiplier")),
+            get_property(properties, str("holes", i, "_columns")),
+            get_property(properties, str("holes", i, "_rows")),
+            get_property(properties, str("holes", i, "_column_spacing")),
+            get_property(properties, str("holes", i, "_row_spacing")),
+            get_property(properties, str("holes", i, "_horizontal_offset")),
+            get_property(properties, str("holes", i, "_vertical_offset")),
+            get_property(properties, str("holes", i, "_rivet_inner_diameter")),
+            get_property(properties, str("holes", i, "_anvil_guide"))
+        ]
+    ];
+    
+    echo(hole_sets);
 
     difference() {
         union() {
