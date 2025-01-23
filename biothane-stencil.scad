@@ -48,20 +48,19 @@ module triangular_cutout(offset_side, offset_end) {
 
 module anvil_guide(
     hole_sets, 
-    wall_thickness, 
+    wall_thickness,
+    material_width,
     material_height, 
     extra_width, 
     outer_width, 
     stencil_length
 ) {
-    if (hole_sets[0][10 /*.anvil_guide*/] > 0 || hole_sets[1][10 /*.anvil_guide*/] > 0) {
+    if (max([for (i = [0: len(hole_sets)-1]) hole_sets[i][10]]) > 0) {
         anvil_guide_height = 0; // wall_thickness + material_height;
         
         translate([0, 0, -anvil_guide_height]) { // move it below the base plate
             difference() {
-                // anvil guide base plate + wall
                 union() { 
-                    // extra base plate
                     translate([-extra_width, 0, 0])
                     cube([
                         outer_width,
@@ -69,44 +68,34 @@ module anvil_guide(
                         anvil_guide_height
                     ], false);
                     
-                    // wall around the anvil guides
-                    if (hole_sets[0][0 /*.enabled*/] && hole_sets[0][10 /*.anvil_guide*/] > 0) {
-                        holes_from_set(
-                            hole_sets[0],
-                            _diameter = hole_sets[0][10 /*.anvil_guide*/] + wall_thickness,
-                            _height = anvil_guide_height,
-                            _diameter_top_multiplier = 1
-                        );
-                    }
-
-                    if (hole_sets[1][0 /*.enabled*/] && hole_sets[1][10 /*.anvil_guide*/] > 0) {
-                        holes_from_set(
-                            hole_sets[1],
-                            _diameter = hole_sets[1][10 /*.anvil_guide*/] + wall_thickness,
-                            _height = anvil_guide_height,
-                            _diameter_top_multiplier = 1
-                        );
+                    for (i = [0: len(hole_sets)-1]) {
+                        if (hole_sets[i][0] && hole_sets[i][10] > 0) {
+                            holes_from_set(
+                                hole_sets[i],
+                                wall_thickness,
+                                material_width,
+                                stencil_length,
+                                _diameter = hole_sets[i][10] + wall_thickness,
+                                _height = anvil_guide_height,
+                                _diameter_top_multiplier = 1
+                            );
+                        }
                     }
                 }
-
+                
                 translate([0, 0, anvil_guide_height * -0.5]) {
-                    // anvil guide cutouts
-                    if (hole_sets[0][0 /*.enabled*/] && hole_sets[0][10 /*.anvil_guide*/] > 0) {
-                        holes_from_set(
-                            hole_sets[0],
-                            _diameter = hole_sets[0][10 /*.anvil_guide*/],
-                            _height = anvil_guide_height * 1.5,
-                            _diameter_top_multiplier = 1
-                        );
-                    }
-
-                    if (hole_sets[1][0 /*.enabled*/] && hole_sets[1][10 /*.anvil_guide*/] > 0) {
-                        holes_from_set(
-                            hole_sets[1],
-                            _diameter = hole_sets[1][10 /*.anvil_guide*/],
-                            _height = anvil_guide_height * 1.5,
-                            _diameter_top_multiplier = 1
-                        );
+                    for (i = [0: len(hole_sets)-1]) {
+                        if (hole_sets[i][0] && hole_sets[i][10] > 0) {
+                            holes_from_set(
+                                hole_sets[i],
+                                wall_thickness,
+                                material_width,
+                                stencil_length,
+                                _diameter = hole_sets[i][10],
+                                _height = anvil_guide_height * 1.5,
+                                _diameter_top_multiplier = 1
+                            );
+                        }
                     }
                 }
             }
@@ -179,8 +168,6 @@ module biothane_stencil(properties) {
         ]
     ];
     
-    echo(hole_sets);
-
     difference() {
         union() {
         
@@ -192,10 +179,11 @@ module biothane_stencil(properties) {
             2*wall_thickness + stencil_length,
             wall_thickness + material_height
           ], false);
-        
+          
           anvil_guide(
               hole_sets, 
-              wall_thickness, 
+              wall_thickness,
+              material_width,
               material_height, 
               extra_width, 
               outer_width, 
@@ -334,23 +322,16 @@ module biothane_stencil(properties) {
           );
         }
         }
-        
-        if (hole_sets[0][0/*.enabled*/]) {
-            holes_from_set(
-              hole_sets[0], 
-              wall_thickness, 
-              material_width, 
-              stencil_length,
-           );
-        }
 
-        if (hole_sets[1][0/*.enabled*/]) {
-           holes_from_set(
-              hole_sets[1], 
-              wall_thickness, 
-              material_width, 
-              stencil_length,
-           ); 
+        for (i = [0: len(hole_sets)-1]) {
+          if (hole_sets[i][0] /*.enabled*/) {
+              holes_from_set(
+                  hole_sets[i],
+                  wall_thickness,
+                  material_width,
+                  stencil_length
+              );
+          }
         }
     }
 
