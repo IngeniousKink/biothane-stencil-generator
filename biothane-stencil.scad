@@ -140,8 +140,8 @@ module biothane_stencil(properties) {
 
     text_left = get_property(properties, "text_left");
     text_right = get_property(properties, "text_right");
+
     font_size = get_property(properties, "font_size");
-    auto_text_right_append_material_width = get_property(properties, "auto_text_right_append_material_width");
 
     include_front_pane = get_property(properties, "include_front_pane");
     include_back_pane = get_property(properties, "include_back_pane");
@@ -158,13 +158,6 @@ module biothane_stencil(properties) {
         side_pane_length = stencil_length - 20;
     }
 
-    text_material_width = str(material_width, "mm");
-    combined_text_right = (
-        auto_text_right_append_material_width
-        ? str(text_right, text_material_width)
-        : text_right
-    );
-    
     marker_long_mark_length = material_width;
 
     hole_set_count = max(
@@ -295,7 +288,7 @@ module biothane_stencil(properties) {
           
         ])
         rotate([90, 0, 90])
-        text_module(text_left, wall_thickness, font_size)
+        text_module(text_left, wall_thickness, font_size);
         
         // right side text cutout
         translate([
@@ -307,7 +300,7 @@ module biothane_stencil(properties) {
         rotate([0, -90, 0])
         rotate([0, 0, 90])
         rotate([0, 0, 180])
-        text_module(combined_text_right, wall_thickness, font_size)
+        text_module(text_right, wall_thickness, font_size);
 
         translate([
           material_width/2 + wall_thickness,
@@ -423,6 +416,6 @@ module text_module(text, wall_thickness, font_size) {
         size = font_size,
         halign = "center",
         valign = "center",
-        $fn = 50
+        $fn = 200
     );
 }
