@@ -32,7 +32,7 @@ function double_rivet_end_25mm() = concat(
 );
 
 
-biothane_stencil_from_properties(concat(
+biothane_stencil(concat(
     double_rivet_end_25mm(),
     get_defaults(),
 ));

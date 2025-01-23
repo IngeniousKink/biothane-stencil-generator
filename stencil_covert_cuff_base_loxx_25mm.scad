@@ -21,7 +21,7 @@ function covert_cuff_base_loxx_25mm() = concat(
   standard_wall_thickness()
 );
 
-biothane_stencil_from_properties(concat(
+biothane_stencil(concat(
     covert_cuff_base_loxx_25mm(),
     get_defaults(),
 ));

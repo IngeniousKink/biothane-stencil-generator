@@ -159,6 +159,6 @@ function get_defaults() = [
 ];
 
 // render the customizer values if executed as a file
-biothane_stencil_from_properties(concat(
+biothane_stencil(concat(
     get_defaults(),
 ));

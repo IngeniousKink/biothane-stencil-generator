@@ -5,7 +5,7 @@ use <aspects.scad>
 
 union() {
 
-  biothane_stencil_from_properties(concat(
+  biothane_stencil(concat(
 
     ["stencil_length", 150],
     ["material_width", 25],
