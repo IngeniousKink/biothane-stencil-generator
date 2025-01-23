@@ -6,6 +6,31 @@ function get_property(properties, key) =
     let(index = search([key], properties))
     len(index) > 0 ? properties[index[0] + 1] : undef;
 
+function hole_set(
+  index,
+  diameter,
+  columns=1,
+  rows=1, 
+  column_spacing=10,
+  row_spacing=20,
+  horizontal_offset=0,
+  vertical_offset=0, 
+  diameter_top_multiplier=1,
+  rivet_inner_diameter=1, 
+  anvil_guide=0) = [
+        str("holes", index, "_enabled"), true,
+        str("holes", index, "_diameter"), diameter,
+        str("holes", index, "_columns"), columns,
+        str("holes", index, "_rows"), rows,
+        str("holes", index, "_column_spacing"), column_spacing,
+        str("holes", index, "_row_spacing"), row_spacing,
+        str("holes", index, "_horizontal_offset"), horizontal_offset,
+        str("holes", index, "_vertical_offset"), vertical_offset,
+        str("holes", index, "_diameter_top_multiplier"), diameter_top_multiplier,
+        str("holes", index, "_rivet_inner_diameter"), rivet_inner_diameter,
+        str("holes", index, "_anvil_guide"), anvil_guide
+    ];
+
 module measure_markings(
     stencil_length, 
     marker_long_mark_length, 
