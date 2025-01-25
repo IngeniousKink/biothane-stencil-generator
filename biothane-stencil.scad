@@ -163,6 +163,25 @@ module cutout_pane(properties, pane) {
     ], false);
 }
 
+function compute_hole_sets(properties) = [
+    for (i = [1:100]) 
+        let(enabled = get_property(properties, str("holes", i, "_enabled")))
+        if (enabled != undef)
+        [
+            enabled,
+            get_property(properties, str("holes", i, "_diameter")),
+            get_property(properties, str("holes", i, "_diameter_top_multiplier")),
+            get_property(properties, str("holes", i, "_columns")),
+            get_property(properties, str("holes", i, "_rows")),
+            get_property(properties, str("holes", i, "_column_spacing")),
+            get_property(properties, str("holes", i, "_row_spacing")),
+            get_property(properties, str("holes", i, "_horizontal_offset")),
+            get_property(properties, str("holes", i, "_vertical_offset")),
+            get_property(properties, str("holes", i, "_rivet_inner_diameter")),
+            get_property(properties, str("holes", i, "_anvil_guide"))
+        ]
+];
+
 
 module biothane_stencil(properties) {
 
@@ -195,31 +214,7 @@ module biothane_stencil(properties) {
 
     marker_long_mark_length = material_width;
 
-    hole_set_count = max(
-      [
-        for (i = [1:100]) (
-          get_property(properties, str("holes", i, "_enabled")) != undef
-        )
-        ? i 
-        : 0
-      ]
-    );
-
-    hole_sets = [
-        for (i = [1:hole_set_count]) [
-            get_property(properties, str("holes", i, "_enabled")),
-            get_property(properties, str("holes", i, "_diameter")),
-            get_property(properties, str("holes", i, "_diameter_top_multiplier")),
-            get_property(properties, str("holes", i, "_columns")),
-            get_property(properties, str("holes", i, "_rows")),
-            get_property(properties, str("holes", i, "_column_spacing")),
-            get_property(properties, str("holes", i, "_row_spacing")),
-            get_property(properties, str("holes", i, "_horizontal_offset")),
-            get_property(properties, str("holes", i, "_vertical_offset")),
-            get_property(properties, str("holes", i, "_rivet_inner_diameter")),
-            get_property(properties, str("holes", i, "_anvil_guide"))
-        ]
-    ];
+    hole_sets = compute_hole_sets(properties);
     
     difference() {
         union() {
