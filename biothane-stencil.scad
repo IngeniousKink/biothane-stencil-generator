@@ -128,6 +128,41 @@ module anvil_guide(
     }
 }
 
+module cutout_pane(properties, pane) {
+    wall_thickness = get_property(properties, "wall_thickness");
+    material_width = get_property(properties, "material_width");
+    material_height = get_property(properties, "material_height");
+    stencil_length = get_property(properties, "stencil_length");
+    extra_width = get_property(properties, "extra_width");
+    EXTRA = 50;
+
+    y_offset = (pane == "front") 
+        ? -(wall_thickness + EXTRA) 
+        : stencil_length;
+
+    translate([
+        -(wall_thickness + EXTRA) / 2,
+        y_offset,
+        -EXTRA / 2
+    ])
+    cube([
+        material_width + 2 * wall_thickness + 2 * extra_width + EXTRA,
+        wall_thickness + EXTRA,
+        wall_thickness + material_height + EXTRA
+    ], false);
+
+    translate([
+        0,
+        (pane == "front") ? -stencil_length / 2 : stencil_length / 2,
+        0
+    ])
+    cube([
+        material_width,
+        stencil_length,
+        material_height + EXTRA
+    ], false);
+}
+
 
 module biothane_stencil(properties) {
 
@@ -220,54 +255,12 @@ module biothane_stencil(properties) {
           material_height + EXTRA
         ], false);
 
-        // front pane cutout
-        if (!include_front_pane) {
-            translate([
-              -(wall_thickness + EXTRA)/2,
-              -(wall_thickness + EXTRA),
-              -EXTRA/2
-            ])
-              // front pane cutout
-              cube([
-                outer_width + EXTRA,
-                wall_thickness + EXTRA,
-                wall_thickness + material_height + EXTRA
-              ], false);
-              
-              // inner cutout
-              translate([0, -stencil_length/2, 0])
-              cube([
-                material_width,
-                stencil_length,
-                material_height + EXTRA
-              ], false);
-            
-         
-            
-        }
+            if (!include_front_pane) {
+              cutout_pane(properties, "front");
+            }
 
-        // back pane cutout
-        if (!include_back_pane) {
-            translate([
-              -(wall_thickness + EXTRA)/2,
-              (stencil_length),
-              -EXTRA/2
-            ])            
-              // back pane cutout
-              cube([
-                outer_width + EXTRA,
-                wall_thickness + EXTRA,
-                wall_thickness + material_height + EXTRA
-              ], false);
-              
-              // inner cutout
-              translate([0, stencil_length/2, 0])
-              cube([
-                material_width,
-                stencil_length,
-                material_height + EXTRA
-              ], false);
-            
+            if (!include_back_pane) {
+             cutout_pane(properties, "back");
             }
         
             // bottom pane measure cutout
