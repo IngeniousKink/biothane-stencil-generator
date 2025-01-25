@@ -198,6 +198,16 @@ module biothane_stencil(properties) {
 
         text_cutout(properties, "left");
         text_cutout(properties, "right");
+        text_cutout(properties, "front");
+        text_cutout(properties, "back");
+
+        text_cutout(properties, "top");
+        text_cutout(properties, "bottom");
+
+        #text_cutout(properties, "top_left");
+        #text_cutout(properties, "top_right");
+        #text_cutout(properties, "top_front");
+        #text_cutout(properties, "top_back");
 
         translate([
           material_width/2 + wall_thickness,
@@ -304,7 +314,35 @@ module holes_from_set(
         }
     }
 }
+// Function to calculate translation based on position
+function calculate_text_translation(position, wall_thickness, material_width, material_height, stencil_length, extra_width) =
+    (position == "left") ? [material_width + wall_thickness * 1.5 + extra_width, stencil_length / 2 + wall_thickness, (wall_thickness + material_height) / 2] :
+    (position == "right") ? [wall_thickness / 2 - extra_width, stencil_length / 2 + wall_thickness, (wall_thickness + material_height) / 2] :
+    (position == "front") ? [material_width / 2, wall_thickness / 2, (wall_thickness + material_height) / 2] :
+    (position == "back") ? [material_width / 2, stencil_length + wall_thickness, (wall_thickness + material_height) / 2] :
+    (position == "top") ? [material_width / 2, stencil_length / 2, material_height - wall_thickness] :
+    (position == "bottom") ? [material_width / 2, stencil_length / 2, wall_thickness / 2] :
+    (position == "top_left") ? [wall_thickness / 2 - extra_width / 2, stencil_length / 2, material_height + wall_thickness/2] :
+    (position == "top_right") ? [+material_width + wall_thickness + extra_width/2, stencil_length / 2, material_height + wall_thickness/2] :
+    (position == "top_front") ? [material_width / 2, wall_thickness / 2, material_height + wall_thickness] :
+    (position == "top_back") ? [material_width / 2, stencil_length + wall_thickness, material_height + wall_thickness/2] :
+    [0, 0, 0]; // Default if no match
 
+// Function to calculate rotation based on position
+function calculate_text_rotation(position) =
+    (position == "left") ? [90, 0, 90] :
+    (position == "right") ? [90, 0, 270] :
+    (position == "front") ? [90, 0, 0] :
+    (position == "back") ? [90, 0, 180] :
+    (position == "top") ? [0, 0, 0] :
+    (position == "bottom") ? [0, 180, 0] :
+    (position == "top_left") ? [0, 0, 90] :
+    (position == "top_right") ? [0, 0, 90] :
+    (position == "top_front") ? [0, 0, 0] :
+    (position == "top_back") ? [0, 0, 180] :
+    [0, 0, 0]; // Default if no match
+
+// Main module
 module text_cutout(properties, position = "left") {
     wall_thickness = get_property(properties, "wall_thickness");
     material_width = get_property(properties, "material_width");
@@ -313,24 +351,24 @@ module text_cutout(properties, position = "left") {
     extra_width = get_property(properties, "extra_width");
     font_size = get_property(properties, "font_size");
 
-    text_value = (position == "left") 
-        ? get_property(properties, "text_left") 
-        : get_property(properties, "text_right");
+    // Dynamically generate the property key for text by concatenating "text_" and position
+    text_value = get_property(properties, str("text_", position));
 
-    x_offset = (position == "left") 
-        ? (material_width + wall_thickness * 1.5 + extra_width) 
-        : (wall_thickness / 2) - extra_width;
+    // Get translation and rotation using the functions
+    translation = calculate_text_translation(
+        position,
+        wall_thickness,
+        material_width,
+        material_height,
+        stencil_length,
+        extra_width
+    );
 
-    rotate_angles = (position == "left") 
-        ? [90, 0, 90] 
-        : [90, 0, 270];
+    rotation = calculate_text_rotation(position);
 
-    translate([
-        x_offset,
-        stencil_length / 2 + wall_thickness,
-        (wall_thickness + material_height) / 2
-    ])
-    rotate(rotate_angles)
+    // Apply translation and rotation
+    translate(translation)
+    rotate(rotation)
     text_module(text_value, wall_thickness, font_size);
 }
 
