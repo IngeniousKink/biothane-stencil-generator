@@ -14,7 +14,11 @@ function covert_cuff_base_loxx_25mm() = concat(
     "include_back_pane", true,
     "material_width", 25,
     "stencil_length", 35,
-    "text_left", "covert cuff base LOXX"
+    "text_left", "covert cuff base",
+    "text_right", "5.0mm · LOXX",
+    "text_back", "25mm",
+   
+
   ],
   standard_wall_thickness()
 );

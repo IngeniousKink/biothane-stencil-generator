@@ -319,7 +319,7 @@ function calculate_text_translation(position, wall_thickness, material_width, ma
     (position == "left") ? [material_width + wall_thickness * 1.5 + extra_width, stencil_length / 2 + wall_thickness, (wall_thickness + material_height) / 2] :
     (position == "right") ? [wall_thickness / 2 - extra_width, stencil_length / 2 + wall_thickness, (wall_thickness + material_height) / 2] :
     (position == "front") ? [material_width / 2, wall_thickness / 2, (wall_thickness + material_height) / 2] :
-    (position == "back") ? [material_width / 2, stencil_length + wall_thickness, (wall_thickness + material_height) / 2] :
+    (position == "back") ? [material_width / 2, stencil_length + wall_thickness*1.5, (wall_thickness + material_height) / 2] :
     (position == "top") ? [material_width / 2, stencil_length / 2, material_height - wall_thickness] :
     (position == "bottom") ? [material_width / 2, stencil_length / 2, wall_thickness / 2] :
     (position == "top_left") ? [wall_thickness / 2 - extra_width / 2, stencil_length / 2, material_height + wall_thickness/2] :
