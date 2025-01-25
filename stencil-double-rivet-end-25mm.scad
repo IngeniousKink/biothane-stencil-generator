@@ -18,9 +18,7 @@ function double_rivet_end_25mm() = concat(
     rows=2,
     column_spacing=12.5,
     row_spacing=12.5,
-    vertical_offset=28,
-    rivet_inner_diameter=25.6,
-    anvil_guide=25.6
+    vertical_offset=28
   ),
 
   hole_set(
@@ -29,9 +27,7 @@ function double_rivet_end_25mm() = concat(
     rows=2,
     column_spacing=12.5,
     row_spacing=12.5,
-    vertical_offset=-15,
-    rivet_inner_diameter=25.6,
-    anvil_guide=25.6
+    vertical_offset=-15
   ),
 
   h1_chicago_screws(),

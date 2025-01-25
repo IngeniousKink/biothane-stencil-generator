@@ -34,9 +34,6 @@ holes1_row_spacing = 20; // .01
 holes1_horizontal_offset = 0.0; // .01
 holes1_vertical_offset = 0.0; // .01
 holes1_diameter_top_multiplier = 1.3; // .1
-holes1_rivet_inner_diameter = 4.5; // .01
-
-holes1_anvil_guide = 0;
 
 /* [Holes (second set)] */
 // enable this set of holes
@@ -51,9 +48,6 @@ holes2_row_spacing = 20; // .01
 holes2_horizontal_offset = 0.0; // .01
 holes2_vertical_offset = 0.0; // .01
 holes2_diameter_top_multiplier = 1.3; // .1
-holes2_rivet_inner_diameter = 4.5; // .01
-
-holes2_anvil_guide = 0;
 
 /* [text text_left] */
 text_left = "biothane-stencil-generator";
@@ -114,8 +108,6 @@ function get_defaults() = [
     "holes1_horizontal_offset", holes1_horizontal_offset,
     "holes1_vertical_offset", holes1_vertical_offset,
     "holes1_diameter_top_multiplier", holes1_diameter_top_multiplier,
-    "holes1_rivet_inner_diameter", holes1_rivet_inner_diameter,
-    "holes1_anvil_guide", holes1_anvil_guide,
 
     "holes2_enabled", holes2_enabled,
     "holes2_diameter", holes2_diameter,
@@ -126,8 +118,6 @@ function get_defaults() = [
     "holes2_horizontal_offset", holes2_horizontal_offset,
     "holes2_vertical_offset", holes2_vertical_offset,
     "holes2_diameter_top_multiplier", holes2_diameter_top_multiplier,
-    "holes2_rivet_inner_diameter", holes2_rivet_inner_diameter,
-    "holes2_anvil_guide", holes2_anvil_guide,
 
     "text_left", text_left,
     "text_right", text_right,

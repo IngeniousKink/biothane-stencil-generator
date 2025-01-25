@@ -15,9 +15,8 @@ function hole_set(
   row_spacing=20,
   horizontal_offset=0,
   vertical_offset=0, 
-  diameter_top_multiplier=1,
-  rivet_inner_diameter=1, 
-  anvil_guide=0) = [
+  diameter_top_multiplier=1
+  ) = [
         str("holes", index, "_enabled"), true,
         str("holes", index, "_diameter"), diameter,
         str("holes", index, "_columns"), columns,
@@ -27,8 +26,6 @@ function hole_set(
         str("holes", index, "_horizontal_offset"), horizontal_offset,
         str("holes", index, "_vertical_offset"), vertical_offset,
         str("holes", index, "_diameter_top_multiplier"), diameter_top_multiplier,
-        str("holes", index, "_rivet_inner_diameter"), rivet_inner_diameter,
-        str("holes", index, "_anvil_guide"), anvil_guide
     ];
 
 module measure_markings(
@@ -68,63 +65,6 @@ module triangular_cutout(offset_side, offset_end) {
             [(-outer_width/2) + offset_end, -wall_thickness],
             [0, ((stencil_length - side_pane_length)/2) - offset_side]
         ]);
-    }
-}
-
-module anvil_guide(
-    hole_sets, 
-    wall_thickness,
-    material_width,
-    material_height, 
-    extra_width, 
-    outer_width, 
-    stencil_length
-) {
-    if (max([for (i = [0: len(hole_sets)-1]) hole_sets[i][10]]) > 0) {
-        anvil_guide_height = 0; // wall_thickness + material_height;
-        
-        translate([0, 0, -anvil_guide_height]) { // move it below the base plate
-            difference() {
-                union() { 
-                    translate([-extra_width, 0, 0])
-                    cube([
-                        outer_width,
-                        2 * wall_thickness + stencil_length,
-                        anvil_guide_height
-                    ], false);
-                    
-                    for (i = [0: len(hole_sets)-1]) {
-                        if (hole_sets[i][0] && hole_sets[i][10] > 0) {
-                            holes_from_set(
-                                hole_sets[i],
-                                wall_thickness,
-                                material_width,
-                                stencil_length,
-                                _diameter = hole_sets[i][10] + wall_thickness,
-                                _height = anvil_guide_height,
-                                _diameter_top_multiplier = 1
-                            );
-                        }
-                    }
-                }
-                
-                translate([0, 0, anvil_guide_height * -0.5]) {
-                    for (i = [0: len(hole_sets)-1]) {
-                        if (hole_sets[i][0] && hole_sets[i][10] > 0) {
-                            holes_from_set(
-                                hole_sets[i],
-                                wall_thickness,
-                                material_width,
-                                stencil_length,
-                                _diameter = hole_sets[i][10],
-                                _height = anvil_guide_height * 1.5,
-                                _diameter_top_multiplier = 1
-                            );
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -177,8 +117,6 @@ function compute_hole_sets(properties) = [
             get_property(properties, str("holes", i, "_row_spacing")),
             get_property(properties, str("holes", i, "_horizontal_offset")),
             get_property(properties, str("holes", i, "_vertical_offset")),
-            get_property(properties, str("holes", i, "_rivet_inner_diameter")),
-            get_property(properties, str("holes", i, "_anvil_guide"))
         ]
 ];
 
@@ -227,16 +165,6 @@ module biothane_stencil(properties) {
             2*wall_thickness + stencil_length,
             wall_thickness + material_height
           ], false);
-          
-          anvil_guide(
-              hole_sets, 
-              wall_thickness,
-              material_width,
-              material_height, 
-              extra_width, 
-              outer_width, 
-              stencil_length,
-          );
         }
  
         // inner cutout
