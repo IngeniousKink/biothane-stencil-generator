@@ -14,7 +14,6 @@ function test_text_everywhere() = concat(
     
     "text_left", "left",    
     "text_right", "right",    
-
     "text_front", "front",
     "text_back", "back",
     
@@ -23,13 +22,11 @@ function test_text_everywhere() = concat(
 
     "text_top_left", "top left",    
     "text_top_right", "top right",    
-
     "text_top_front", "top front",
     "text_top_back", "top back",
-    
-    "holes1_columns", 0,
-    "holes2_enabled", false,
 
+    "holes1_enabled", false,
+    "holes2_enabled", false,
     ],
 
 );
@@ -39,3 +36,4 @@ biothane_stencil(concat(
     test_text_everywhere(),
     get_defaults(),
 ));
+    

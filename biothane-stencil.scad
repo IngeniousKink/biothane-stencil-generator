@@ -204,10 +204,10 @@ module biothane_stencil(properties) {
         text_cutout(properties, "top");
         text_cutout(properties, "bottom");
 
-        #text_cutout(properties, "top_left");
-        #text_cutout(properties, "top_right");
-        #text_cutout(properties, "top_front");
-        #text_cutout(properties, "top_back");
+        text_cutout(properties, "top_left");
+        text_cutout(properties, "top_right");
+        text_cutout(properties, "top_front");
+        text_cutout(properties, "top_back");
 
         translate([
           material_width/2 + wall_thickness,
@@ -324,7 +324,7 @@ function calculate_text_translation(position, wall_thickness, material_width, ma
     (position == "bottom") ? [material_width / 2, stencil_length / 2, wall_thickness / 2] :
     (position == "top_left") ? [wall_thickness / 2 - extra_width / 2, stencil_length / 2, material_height + wall_thickness/2] :
     (position == "top_right") ? [+material_width + wall_thickness + extra_width/2, stencil_length / 2, material_height + wall_thickness/2] :
-    (position == "top_front") ? [material_width / 2, wall_thickness / 2, material_height + wall_thickness] :
+    (position == "top_front") ? [material_width / 2, wall_thickness / 2, material_height + wall_thickness/2] :
     (position == "top_back") ? [material_width / 2, stencil_length + wall_thickness, material_height + wall_thickness/2] :
     [0, 0, 0]; // Default if no match
 
