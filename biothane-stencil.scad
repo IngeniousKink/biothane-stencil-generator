@@ -33,7 +33,7 @@ module measure_markings(
     marker_long_mark_length, 
     marker_short_mark_length, 
     material_width, 
-    extra_width
+    marker_width
 ) {
     for (pos = [1:stencil_length]) {
         mark_length = (
@@ -45,10 +45,10 @@ module measure_markings(
         translate([
             material_width / 2,
             pos,
-            (extra_width / 2) - 0.5
+            (marker_width / 2) - 0.5
         ])
         rotate([90, 90, 0])
-        cube([extra_width, mark_length, 0.5], true);
+        cube([marker_width, mark_length, 0.5], true);
     }
 }
 
@@ -192,7 +192,7 @@ module biothane_stencil(properties) {
               marker_long_mark_length, 
               marker_short_mark_length, 
               material_width, 
-              extra_width
+              marker_width,
             );        
         }
 
