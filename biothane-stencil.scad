@@ -273,27 +273,8 @@ module biothane_stencil(properties) {
             );        
         }
 
-        // left side text cutout
-        translate([
-          material_width + wall_thickness*1.5 + extra_width,
-          stencil_length/2 + wall_thickness,
-          (wall_thickness + material_height)/2
-          
-        ])
-        rotate([90, 0, 90])
-        text_module(text_left, wall_thickness, font_size);
-        
-        // right side text cutout
-        translate([
-          (wall_thickness/2) - extra_width,
-          stencil_length/2 + wall_thickness,
-          (wall_thickness + material_height)/2
-          
-        ])
-        rotate([0, -90, 0])
-        rotate([0, 0, 90])
-        rotate([0, 0, 180])
-        text_module(text_right, wall_thickness, font_size);
+        text_cutout(properties, "left");
+        text_cutout(properties, "right");
 
         translate([
           material_width/2 + wall_thickness,
@@ -399,6 +380,35 @@ module holes_from_set(
             );
         }
     }
+}
+
+module text_cutout(properties, position = "left") {
+    wall_thickness = get_property(properties, "wall_thickness");
+    material_width = get_property(properties, "material_width");
+    material_height = get_property(properties, "material_height");
+    stencil_length = get_property(properties, "stencil_length");
+    extra_width = get_property(properties, "extra_width");
+    font_size = get_property(properties, "font_size");
+
+    text_value = (position == "left") 
+        ? get_property(properties, "text_left") 
+        : get_property(properties, "text_right");
+
+    x_offset = (position == "left") 
+        ? (material_width + wall_thickness * 1.5 + extra_width) 
+        : (wall_thickness / 2) - extra_width;
+
+    rotate_angles = (position == "left") 
+        ? [90, 0, 90] 
+        : [90, 0, 270];
+
+    translate([
+        x_offset,
+        stencil_length / 2 + wall_thickness,
+        (wall_thickness + material_height) / 2
+    ])
+    rotate(rotate_angles)
+    text_module(text_value, wall_thickness, font_size);
 }
 
 module text_module(text, wall_thickness, font_size) {
