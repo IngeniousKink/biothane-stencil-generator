@@ -2,6 +2,8 @@ use <biothane-stencil.scad>
 use <defaults.scad>
 use <aspects.scad>
 
+$fn = 200;
+
 stencil_length = 110;
 row_spacing = 9;
 

@@ -2,6 +2,8 @@ use <biothane-stencil.scad>
 use <defaults.scad>
 use <aspects.scad>
 
+$fn = 200;
+
 function double_rivet_end_25mm() = concat(
   [
     "stencil_length", 90,

@@ -5,6 +5,8 @@ use <aspects.scad>
 
 use <stencil-covert-cuff-base-loxx-25mm.scad>
 
+$fn = 200;
+
 union() {
 
   biothane_stencil(concat(

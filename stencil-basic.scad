@@ -3,6 +3,8 @@ use <biothane-stencil.scad>
 use <defaults.scad>
 use <aspects.scad>
 
+$fn = 200;
+
 union() {
 
   biothane_stencil(concat(

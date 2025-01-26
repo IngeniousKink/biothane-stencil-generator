@@ -6,6 +6,11 @@ function get_property(properties, key) =
     let(index = search([key], properties))
     len(index) > 0 ? properties[index[0] + 1] : undef;
 
+function compute_outer_width(properties) = 
+    get_property(properties, "material_width") + 
+    2 * get_property(properties, "wall_thickness") + 
+    2 * get_property(properties, "extra_width");
+
 function hole_set(
   index,
   diameter,
@@ -53,18 +58,95 @@ module measure_markings(
 }
 
 
-module triangular_cutout(offset_side, offset_end) {
+module edge_cutout(properties, shape, position) {
+    stencil_length = get_property(properties, "stencil_length");
+    material_width = get_property(properties, "material_width");
+    wall_thickness = get_property(properties, "wall_thickness");
+    
+    translate([material_width/2 + wall_thickness, stencil_length/2 + wall_thickness]) {
+        if (position == "front_left") {
+            mirror([1, 0, 0])
+            mirror([0, 1, 0])
+            if (shape == "triangle") {
+                triangular_cutout(properties, position);
+            } else if (shape == "round") {
+                round_cutout(properties, position);
+            }
+        } else if (position == "front_right") {
+            mirror([0, 1, 0])
+            if (shape == "triangle") {
+                triangular_cutout(properties, position);
+            } else if (shape == "round") {
+                round_cutout(properties, position);
+            }
+        } else if (position == "back_left") {
+            mirror([1, 0, 0])
+            if (shape == "triangle") {
+                triangular_cutout(properties, position);
+            } else if (shape == "round") {
+                round_cutout(properties, position);
+            }
+        } else if (position == "back_right") {
+            if (shape == "triangle") {
+                triangular_cutout(properties, position);
+            } else if (shape == "round") {
+                round_cutout(properties, position);
+            }
+        }
+    }
+}
+
+module triangular_cutout(properties, position) {
+    stencil_length = get_property(properties, "stencil_length");
+    wall_thickness = get_property(properties, "wall_thickness");
+    material_height = get_property(properties, "material_height");
+    side_pane_length = get_property(properties, "side_pane_length");
+
+    offset_side = get_property(properties, str(position, "_cutout_offset_side"));
+    offset_end = get_property(properties, str(position, "_cutout_offset_end"));
+
+    outer_width = compute_outer_width(properties);
+
+    points = [
+        [0, -wall_thickness],
+        [-offset_end, -wall_thickness],
+        [0, offset_side]
+    ];
+
+    echo(points);
+
     translate([
       outer_width/2,
       -stencil_length/2,
-      0//-(wall_thickness + material_height)/2
+      0
     ])
-    linear_extrude(height = (wall_thickness + material_height)) {
-        polygon(points=[
-            [0, -wall_thickness],
-            [(-outer_width/2) + offset_end, -wall_thickness],
-            [0, ((stencil_length - side_pane_length)/2) - offset_side]
-        ]);
+    linear_extrude(height = (wall_thickness + material_height))
+    polygon(points);
+}
+
+module round_cutout(properties, position) {
+    material_width = get_property(properties, "material_width");
+    stencil_length = get_property(properties, "stencil_length");
+
+    wall_thickness = get_property(properties, "wall_thickness");
+    material_height = get_property(properties, "material_height");
+
+    outer_width = compute_outer_width(properties);
+
+    roundness = get_property(properties, str(position, "_cutout_roundness"));
+    
+    translate([
+        -roundness + outer_width/2,
+        roundness - stencil_length/2,
+        0
+    ])
+    rotate([0,0,270])
+    difference() {
+        cube([roundness*10, roundness*10, (wall_thickness + material_height)]);
+        cylinder(
+            h = (wall_thickness + material_height),
+            r=roundness
+        );
     }
 }
 
@@ -144,7 +226,7 @@ module biothane_stencil(properties) {
 
     EXTRA = 50;
 
-    outer_width = material_width + 2*wall_thickness + 2 * extra_width;
+    outer_width = compute_outer_width(properties);
     
     if (auto_side_pane_length) {
         side_pane_length = stencil_length - 20;
@@ -209,44 +291,15 @@ module biothane_stencil(properties) {
         text_cutout(properties, "top_front");
         text_cutout(properties, "top_back");
 
-        translate([
-          material_width/2 + wall_thickness,
-          stencil_length/2 + wall_thickness
-        ]) {
-        // triangular edges cutout
-        if (front_left_cutout == true) {
-          mirror([1, 0, 0])
-          mirror([0, 1, 0])
-          triangular_cutout(
-             offset_side = front_left_cutout_offset_side,
-             offset_end = front_left_cutout_offset_end
-          );
-        }
-        
-        if (front_right_cutout == true) {
-           mirror([0, 1, 0])
-           triangular_cutout(
-             offset_side = front_right_cutout_offset_side,
-             offset_end = front_right_cutout_offset_end
-           );
-        }
-        
-        if (back_left_cutout == true) {
-          mirror([1, 0, 0])
-          triangular_cutout(
-            offset_side = back_left_cutout_offset_side,
-            offset_end = back_left_cutout_offset_end
-          );
-        }
-        
-        if (back_right_cutout == true) {
-          mirror([0, 0, 0])
-          triangular_cutout(
-            offset_side = back_right_cutout_offset_side,
-            offset_end = back_right_cutout_offset_end
-          );
-        }
-        }
+        edge_cutout(properties, "triangle", "front_left");
+        edge_cutout(properties, "triangle", "front_right");
+        edge_cutout(properties, "triangle", "back_left");
+        edge_cutout(properties, "triangle", "back_right");
+
+        edge_cutout(properties, "round", "front_left");
+        edge_cutout(properties, "round", "front_right");
+        edge_cutout(properties, "round", "back_left");
+        edge_cutout(properties, "round", "back_right");
 
         for (i = [0: len(hole_sets)-1]) {
           if (hole_sets[i][0] /*.enabled*/) {

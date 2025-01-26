@@ -63,24 +63,24 @@ include_front_pane = false;
 include_back_pane = false;
 
 /* [edge cutouts front left] */
-front_left_cutout = false;
 front_left_cutout_offset_side = 0;
 front_left_cutout_offset_end = 0;
+front_left_cutout_roundness = 0;
 
 /* [edge cutouts front right] */
-front_right_cutout = false;
 front_right_cutout_offset_side = 0;
 front_right_cutout_offset_end = 0;
+front_right_cutout_roundness = 0;
 
 /* [edge cutouts back left] */
-back_left_cutout = false;
 back_left_cutout_offset_side = 0;
 back_left_cutout_offset_end = 0;
+back_left_cutout_roundness = 0;
 
 /* [edge cutouts back right] */
-back_right_cutout = false;
 back_right_cutout_offset_side = 0;
 back_right_cutout_offset_end = 0;
+back_right_cutout_roundness = 0;
 
 /* [measuring markers] */
 marker_width = 0.5;
@@ -130,18 +130,22 @@ function get_defaults() = [
     "front_left_cutout", front_left_cutout,
     "front_left_cutout_offset_side", front_left_cutout_offset_side,
     "front_left_cutout_offset_end", front_left_cutout_offset_end,
+    "front_left_cutout_roundness", front_left_cutout_roundness,
 
     "front_right_cutout", front_right_cutout,
     "front_right_cutout_offset_side", front_right_cutout_offset_side,
     "front_right_cutout_offset_end", front_right_cutout_offset_end,
+    "front_right_cutout_roundness", front_right_cutout_roundness,
 
     "back_left_cutout", back_left_cutout,
     "back_left_cutout_offset_side", back_left_cutout_offset_side,
     "back_left_cutout_offset_end", back_left_cutout_offset_end,
+    "back_left_cutout_roundness", back_left_cutout_roundness,
 
     "back_right_cutout", back_right_cutout,
     "back_right_cutout_offset_side", back_right_cutout_offset_side,
     "back_right_cutout_offset_end", back_right_cutout_offset_end,
+    "back_right_cutout_roundness", back_right_cutout_roundness,
 
     "marker_width", marker_width,
     "marker_short_mark_length", marker_short_mark_length,

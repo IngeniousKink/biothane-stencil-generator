@@ -2,6 +2,8 @@ use <biothane-stencil.scad>
 use <defaults.scad>
 use <aspects.scad>
 
+$fn = 200;
+
 function covert_cuff_base_loxx_25mm() = concat(
 
   h1_chicago_screws(),
