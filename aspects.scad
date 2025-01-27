@@ -93,3 +93,44 @@ function double_rivet_end_19mm() = concat([
   "text_left", "double rivet end",
   "wall_thickness", 2
 ], standard_wall_thickness(), h1_chicago_screws(), h2_chicago_screws());
+
+
+function tool_hand_press_with_anvil(index, anvil_diameter) = [
+    /*
+     * Paracord spindle hand press
+     * https://www.paracord.co.uk/leather-products/basic-leather-tools/spindle-hand-press-and-accessories/spindel
+     * 
+     * 
+     * 12mm anvil => 12.0 (untested) https://www.paracord.co.uk/leather-products/basic-leather-tools/spindle-hand-press-and-accessories/spindle-hand-press-anvil-12-mm
+     * 24mm anvil => 24.0 (untested) https://www.paracord.co.uk/leather-products/basic-leather-tools/spindle-hand-press-and-accessories/spindle-hand-press-anvil-24-m-m
+     * 28mm anvil => 28.0 (untested) https://www.paracord.co.uk/spindle-hand-press-anvil-28-m-m-1
+     *
+     *  China spindle hand press 
+     *
+     *  M8 hole punching anvil => 25.6 (tested) https://www.aliexpress.us/item/3256805070373470.html?gatewayAdapt=glo2usa
+     *
+     */
+
+    str("holes", index, "_diameter"), anvil_diameter,
+    "extra_width", anvil_diameter/2,
+];
+
+function tool_pencil_marker(index, pencil_tip_diameter=2) = [
+    /*
+     * Use a pencil to mark the center of where the hole needs to be, then, without the stencil 
+     * use e.g. hole punch pliers to make the hole in the desired diameter.
+     *
+     */
+
+    str("holes", index, "_diameter"), pencil_tip_diameter,
+];
+
+function tool_hole_punch_pliers_famex_3519(index, hole_diameter) = [
+    /*
+     * Use a pencil to mark the center of where the hole needs to be, then, without the stencil 
+     * use e.g. hole punch pliers to make the hole in the desired diameter.
+     *
+     */
+
+    str("holes", index, "_diameter"), hole_diameter + 1.5,
+];

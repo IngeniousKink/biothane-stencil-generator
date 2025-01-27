@@ -11,21 +11,28 @@ function double_rivet_end_25mm() = concat(
     "material_width", 25,
     "text_left", "double rivet end",
     "wall_thickness", 2,
-    "extra_width", 10
   ],
 
+  //tool_hand_press_with_anvil(1, 25.6),
+  //tool_pencil_marker(1),
+  tool_hole_punch_pliers_famex_3519(1, 5.0),
+  
   hole_set(
     1,
-    diameter=25.6,
+    diameter=5,
     rows=2,
     column_spacing=12.5,
     row_spacing=12.5,
     vertical_offset=28
   ),
 
+  //tool_hand_press_with_anvil(2, 25.6),
+  //tool_pencil_marker(2),
+  tool_hole_punch_pliers_famex_3519(2, 5.0),
+
   hole_set(
     2,
-    diameter=25.6,
+    diameter=5,
     rows=2,
     column_spacing=12.5,
     row_spacing=12.5,
