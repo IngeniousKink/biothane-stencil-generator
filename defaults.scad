@@ -127,22 +127,18 @@ function get_defaults() = [
     "include_front_pane", include_front_pane,
     "include_back_pane", include_back_pane,
 
-    "front_left_cutout", front_left_cutout,
     "front_left_cutout_offset_side", front_left_cutout_offset_side,
     "front_left_cutout_offset_end", front_left_cutout_offset_end,
     "front_left_cutout_roundness", front_left_cutout_roundness,
 
-    "front_right_cutout", front_right_cutout,
     "front_right_cutout_offset_side", front_right_cutout_offset_side,
     "front_right_cutout_offset_end", front_right_cutout_offset_end,
     "front_right_cutout_roundness", front_right_cutout_roundness,
 
-    "back_left_cutout", back_left_cutout,
     "back_left_cutout_offset_side", back_left_cutout_offset_side,
     "back_left_cutout_offset_end", back_left_cutout_offset_end,
     "back_left_cutout_roundness", back_left_cutout_roundness,
 
-    "back_right_cutout", back_right_cutout,
     "back_right_cutout_offset_side", back_right_cutout_offset_side,
     "back_right_cutout_offset_end", back_right_cutout_offset_end,
     "back_right_cutout_roundness", back_right_cutout_roundness,
