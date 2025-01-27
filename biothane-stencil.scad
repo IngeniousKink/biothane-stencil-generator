@@ -113,8 +113,6 @@ module triangular_cutout(properties, position) {
         [0, offset_side]
     ];
 
-    echo(points);
-
     translate([
       outer_width/2,
       -stencil_length/2,
