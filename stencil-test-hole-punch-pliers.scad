@@ -16,6 +16,7 @@ function test_hole_punch_pliers() = concat(
     "text_left", "Famex 3519 hole punch pliers test stencil",
     "text_right", "2.0      ·      2.5      ·      3.0      ·      3.5       ·      4.0      ·      4.5      ·  ",
     "wall_thickness", 2,
+    "marker_width", 0,
   ],
 
   tool_hole_punch_pliers_famex_3519( 1, 2.00), hole_set( 1, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  10), // 2
