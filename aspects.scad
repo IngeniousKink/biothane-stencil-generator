@@ -133,4 +133,5 @@ function tool_hole_punch_pliers_famex_3519(index, hole_diameter) = [
      */
 
     str("holes", index, "_diameter"), hole_diameter + 1.5,
+    str("holes", index, "_diameter_top_multiplier"), 1.3,
 ];
