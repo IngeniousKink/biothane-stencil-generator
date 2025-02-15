@@ -18,18 +18,18 @@ function test_hole_punch_pliers() = concat(
     "wall_thickness", 2,
   ],
 
-  hole_set(1, diameter=3.5, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 10), // 2
-  hole_set(2, diameter=3.75, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 20),
-  hole_set(3, diameter=4.0, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 30), // 2.5
-  hole_set(4, diameter=4.25, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 40),
-  hole_set(5, diameter=4.5, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 50), // 3.0
-  hole_set(6, diameter=4.75, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 60),
-  hole_set(7, diameter=5.0, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 70), // 3.5
-  hole_set(8, diameter=5.25, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 80),
-  hole_set(9, diameter=5.5, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 90), // 4.0
-  hole_set(10, diameter=5.75, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 100),
-  hole_set(11, diameter=6.0, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 110), // 4.5
-  hole_set(12, diameter=6.25, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 120),
+  tool_hole_punch_pliers_famex_3519( 1, 2.00), hole_set( 1, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  10), // 2
+  tool_hole_punch_pliers_famex_3519( 2, 2.25), hole_set( 2, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  20),
+  tool_hole_punch_pliers_famex_3519( 3, 2.50), hole_set( 3, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  30), // 2.5
+  tool_hole_punch_pliers_famex_3519( 4, 2.75), hole_set( 4, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  40),
+  tool_hole_punch_pliers_famex_3519( 5, 3.00), hole_set( 5, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  50), // 3.0
+  tool_hole_punch_pliers_famex_3519( 6, 3.25), hole_set( 6, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  60),
+  tool_hole_punch_pliers_famex_3519( 7, 3.50), hole_set( 7, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  70), // 3.5
+  tool_hole_punch_pliers_famex_3519( 8, 3.75), hole_set( 8, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  80),
+  tool_hole_punch_pliers_famex_3519( 9, 4.00), hole_set( 9, row_spacing=row_spacing, vertical_offset=-stencil_length/2 +  90), // 4.0
+  tool_hole_punch_pliers_famex_3519(10, 4.25), hole_set(10, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 100),
+  tool_hole_punch_pliers_famex_3519(11, 4.50), hole_set(11, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 110), // 4.5
+  tool_hole_punch_pliers_famex_3519(12, 4.75), hole_set(12, row_spacing=row_spacing, vertical_offset=-stencil_length/2 + 120),
 
 );
 
